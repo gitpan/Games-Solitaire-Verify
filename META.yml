@@ -1,0 +1,45 @@
+---
+name: Games-Solitaire-Verify
+version: 0.01
+author:
+  - 'Shlomi Fish <shlomif@iglu.org.il>'
+abstract: verify solutions for solitaire games.
+license: mit
+resources:
+  license: http://opensource.org/licenses/mit-license.php
+requires:
+  Class::Accessor: 0
+  Exception::Class: 0
+  File::Spec: 0
+  base: 0
+build_requires:
+  Test::More: 0
+provides:
+  Games::Solitaire::Verify:
+    file: lib/Games/Solitaire/Verify.pm
+    version: 0.01
+  Games::Solitaire::Verify::Base:
+    file: lib/Games/Solitaire/Verify/Base.pm
+    version: 0.01
+  Games::Solitaire::Verify::Card:
+    file: lib/Games/Solitaire/Verify/Card.pm
+    version: 0.01
+  Games::Solitaire::Verify::Column:
+    file: lib/Games/Solitaire/Verify/Column.pm
+    version: 0.01
+  Games::Solitaire::Verify::Exception:
+    file: lib/Games/Solitaire/Verify/Exception.pm
+    version: 0.01
+  Games::Solitaire::Verify::Move:
+    file: lib/Games/Solitaire/Verify/Move.pm
+    version: 0.01
+  Games::Solitaire::Verify::Solution:
+    file: lib/Games/Solitaire/Verify/Solution.pm
+    version: 0.01
+  Games::Solitaire::Verify::State:
+    file: lib/Games/Solitaire/Verify/State.pm
+    version: 0.01
+generated_by: Module::Build version 0.2808
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.2.html
+  version: 1.2
