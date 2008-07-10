@@ -5,9 +5,7 @@ WriteMakefile
           'PL_FILES' => {},
           'INSTALLDIRS' => 'site',
           'NAME' => 'Games::Solitaire::Verify',
-          'EXE_FILES' => [
-                           '/home/shlomi/progs/freecell/trunk/Games-Solitaire-Verify/Games-Solitaire-Verify/bin/verify-solution'
-                         ],
+          'EXE_FILES' => [],
           'VERSION_FROM' => 'lib/Games/Solitaire/Verify.pm',
           'PREREQ_PM' => {
                            'base' => 0,

@@ -1,6 +1,6 @@
 ---
 name: Games-Solitaire-Verify
-version: 0.0101
+version: 0.0102
 author:
   - 'Shlomi Fish <shlomif@iglu.org.il>'
 abstract: verify solutions for solitaire games.
@@ -17,7 +17,7 @@ build_requires:
 provides:
   Games::Solitaire::Verify:
     file: lib/Games/Solitaire/Verify.pm
-    version: 0.0101
+    version: 0.0102
   Games::Solitaire::Verify::Base:
     file: lib/Games/Solitaire/Verify/Base.pm
     version: 0.01
