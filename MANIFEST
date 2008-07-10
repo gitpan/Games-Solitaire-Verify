@@ -5,6 +5,8 @@ lib/Games/Solitaire/Verify/Base.pm
 lib/Games/Solitaire/Verify/Card.pm
 lib/Games/Solitaire/Verify/Column.pm
 lib/Games/Solitaire/Verify/Exception.pm
+lib/Games/Solitaire/Verify/Foundations.pm
+lib/Games/Solitaire/Verify/Freecells.pm
 lib/Games/Solitaire/Verify/Move.pm
 lib/Games/Solitaire/Verify.pm
 lib/Games/Solitaire/Verify/Solution.pm
@@ -24,5 +26,6 @@ t/06-verify-moves.t
 t/07-solution.t
 t/data/sample-solutions/fcs-freecell-24.txt
 t/data/sample-solutions/fcs-freecell-24-wrong-1.txt
+t/data/sample-solutions/fcs-freecell-24-wrong-2.txt
 t/pod-coverage.t
 t/pod.t

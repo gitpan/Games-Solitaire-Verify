@@ -14,7 +14,7 @@ Version 0.0101
 
 =cut
 
-our $VERSION = '0.0101';
+our $VERSION = '0.02';
 
 use base 'Games::Solitaire::Verify::Base';
 
@@ -22,6 +22,8 @@ use Games::Solitaire::Verify::Exception;
 use Games::Solitaire::Verify::Card;
 use Games::Solitaire::Verify::Column;
 use Games::Solitaire::Verify::Move;
+use Games::Solitaire::Verify::Freecells;
+use Games::Solitaire::Verify::Foundations;
 
 use List::Util qw(first);
 
@@ -67,29 +69,19 @@ __PACKAGE__->mk_accessors(qw(
 
 =cut
 
-sub _parse_freecell_card
-{
-    my ($self, $s) = @_;
 
-    return
-    (
-        ($s eq q{  })
-            ? undef()
-            : Games::Solitaire::Verify::Card->new(
-                {
-                    string => $_,
-                }
-            )
-    );
-}
-
-sub _assign_freecells_from_strings
+sub _assign_freecells_from_string
 {
     my $self = shift;
-    my $string_arr = shift;
+    my $string = shift;
 
     $self->_freecells(
-        [ map { $self->_parse_freecell_card($_) } @$string_arr]
+        Games::Solitaire::Verify::Freecells->new(
+            {
+                count => $self->num_freecells(),
+                string => $string,
+            }
+        )
     );
 
     return;
@@ -108,7 +100,7 @@ sub _get_suits_seq
 {
     my $class = shift;
 
-    return [qw(H C D S)];
+    return Games::Solitaire::Verify::Card->get_suits_seq();
 }
 
 sub _from_string
@@ -117,44 +109,30 @@ sub _from_string
 
     my $rank_re = '[0A1-9TJQK]';
 
-    if ($str !~ m{\AFoundations: H-($rank_re) C-($rank_re) D-($rank_re) S-($rank_re) *\n}gms)
+    if ($str !~ m{\A(Foundations:[^\n]*)\n}gms)
     {
         Games::Solitaire::Verify::Exception::Parse::State::Foundations->throw(
             error => "Wrong Foundations",
         );
     }
+    my $founds_s = $1;
 
-    {
-        my @founds_strings = ($1, $2, $3, $4);
-    
-        my %founds;
-        foreach my $suit (@{$self->_get_suits_seq()})
-        {
-            $founds{$suit} =
-                [
-                    Games::Solitaire::Verify::Card->calc_rank_with_0(
-                        shift(@founds_strings)
-                    )
-                ];
-        }
+    $self->_foundations(
+        Games::Solitaire::Verify::Foundations->new(
+            {
+               num_decks => $self->num_decks(),
+                string => $founds_s,
+            }
+        )
+    );
 
-        $self->_foundations(\%founds);
-    }
-
-    my $fc_card_re = '  (..)';
-
-    if ($str !~ m{\GFreecells:$fc_card_re$fc_card_re$fc_card_re$fc_card_re\n}msg)
+    if ($str !~ m{\G(Freecells:[^\n]*)\n}gms)
     {
         Games::Solitaire::Verify::Exception::Parse::State::Freecells->throw(
             error => "Wrong Freecell String",
         );
     }
-
-    {
-        my @freecells = ($1, $2, $3, $4);
-
-        $self->_assign_freecells_from_strings(\@freecells);
-    }
+    $self->_assign_freecells_from_string($1);
 
     foreach my $col_idx (0 .. ($self->num_columns()-1))
     {
@@ -221,7 +199,7 @@ sub get_freecell
 {
     my ($self, $index) = @_;
 
-    return $self->_freecells()->[$index];
+    return $self->_freecells()->cell($index);
 }
 
 =head2 $state->set_freecell($index, $card)
@@ -234,9 +212,7 @@ sub set_freecell
 {
     my ($self, $index, $card) = @_;
 
-    $self->_freecells()->[$index] = $card;
-
-    return;
+    return $self->_freecells->assign($index, $card);
 }
 
 =head2 $state->get_foundation_value($suit, $index)
@@ -250,7 +226,7 @@ sub get_foundation_value
 {
     my ($self, $suit, $idx) = @_;
 
-    return $self->_foundations()->{$suit}->[$idx];
+    return $self->_foundations()->value($suit, $idx);
 }
 
 =head2 $state->increment_foundation_value($suit, $index)
@@ -264,7 +240,7 @@ sub increment_foundation_value
 {
     my ($self, $suit, $idx) = @_;
 
-    $self->_foundations()->{$suit}->[$idx]++;
+    $self->_foundations()->increment($suit, $idx);
 
     return;
 }
@@ -304,16 +280,7 @@ sub num_empty_freecells
 {
     my $self = shift;
 
-    my $count = 0;
-
-    foreach my $fc_idx (0 .. ($self->num_freecells()-1) )
-    {
-        if (!defined($self->get_freecell($fc_idx)))
-        {
-            $count++;
-        }
-    }
-    return $count;
+    return $self->_freecells->num_empty();
 }
 
 =head2 $board->num_columns()
@@ -387,22 +354,12 @@ sub clone
         );
     }
 
-    {
-        my $founds = $self->_foundations();
-        my $founds_copy = +{ 
-            map { $_ => [ @{$founds->{$_}} ] } keys(%$founds) 
-        };
-        $copy->_foundations(
-            $founds_copy
-        );
-    }
+    $copy->_foundations(
+        $self->_foundations()->clone()
+    );
 
     $copy->_freecells(
-        [
-            map
-            { defined($_) ? $_->clone() : $_ }
-            @{$self->_freecells()}
-        ]
+        $self->_freecells()->clone()
     );
 
     return $copy;
@@ -482,6 +439,18 @@ sub _is_sequence_in_column
     }
 }
 
+=head2 $self->clear_freecell($index)
+
+Clears/empties the freecell at position $pos .
+
+=cut
+
+sub clear_freecell
+{
+    my ($self, $index) = @_;
+
+    return $self->_freecells->clear($index);
+}
 
 sub verify_and_perform_move
 {
@@ -529,7 +498,7 @@ sub verify_and_perform_move
                 return "Freecell No. $fc_idx is taken";
             }
 
-            $self->_freecells()->[$fc_idx] = $self->get_column($col_idx)->pop();
+            $self->set_freecell($fc_idx, $self->get_column($col_idx)->pop());
 
             return 0;
         }
@@ -614,7 +583,7 @@ sub verify_and_perform_move
 
             if (defined($f_idx))
             {
-                undef($self->_freecells()->[$fc_idx]);
+                $self->clear_freecell($fc_idx);
                 $self->increment_foundation_value($suit, $f_idx);
                 return 0;
             }
@@ -644,7 +613,7 @@ sub verify_and_perform_move
             }
 
             $self->get_column($col_idx)->push($card);
-            undef($self->_freecells()->[$fc_idx]);                
+            $self->clear_freecell($fc_idx);
             
             return 0;
         }
@@ -663,32 +632,12 @@ sub _stringify_freecells
     );
 }
 
-sub _foundations_strings
-{
-    my $self = shift;
-
-    return [
-        map {
-            sprintf(qq{ %s-%s},
-                $_,
-                Games::Solitaire::Verify::Card->rank_to_string(
-                    $self->get_foundation_value($_, 0)
-                ),
-            )
-        }
-        (@{$self->_get_suits_seq()})
-    ];
-}
 
 sub _stringify_foundations
 {
     my $self = shift;
 
-    return   "Foundations:"
-           . join("", @{$self->_foundations_strings()})
-           . " " # We need the trailing space for compatibility with
-                 # Freecell Solver.
-           ;
+    return $self->_foundations()->to_string();
 }
 
 =head2 $self->to_string()

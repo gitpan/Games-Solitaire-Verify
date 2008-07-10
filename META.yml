@@ -1,6 +1,6 @@
 ---
 name: Games-Solitaire-Verify
-version: 0.0102
+version: 0.02
 author:
   - 'Shlomi Fish <shlomif@iglu.org.il>'
 abstract: verify solutions for solitaire games.
@@ -11,13 +11,14 @@ requires:
   Class::Accessor: 0
   Exception::Class: 0
   File::Spec: 0
+  List::Util: 0
   base: 0
 build_requires:
   Test::More: 0
 provides:
   Games::Solitaire::Verify:
     file: lib/Games/Solitaire/Verify.pm
-    version: 0.0102
+    version: 0.02
   Games::Solitaire::Verify::Base:
     file: lib/Games/Solitaire/Verify/Base.pm
     version: 0.01
@@ -30,6 +31,12 @@ provides:
   Games::Solitaire::Verify::Exception:
     file: lib/Games/Solitaire/Verify/Exception.pm
     version: 0.01
+  Games::Solitaire::Verify::Foundations:
+    file: lib/Games/Solitaire/Verify/Foundations.pm
+    version: 0.01
+  Games::Solitaire::Verify::Freecells:
+    file: lib/Games/Solitaire/Verify/Freecells.pm
+    version: 0.01
   Games::Solitaire::Verify::Move:
     file: lib/Games/Solitaire/Verify/Move.pm
     version: 0.01
@@ -38,7 +45,7 @@ provides:
     version: 0.0101
   Games::Solitaire::Verify::State:
     file: lib/Games/Solitaire/Verify/State.pm
-    version: 0.0101
+    version: 0.02
 generated_by: Module::Build version 0.2808
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.2.html

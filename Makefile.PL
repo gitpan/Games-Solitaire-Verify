@@ -10,6 +10,7 @@ WriteMakefile
           'PREREQ_PM' => {
                            'base' => 0,
                            'Test::More' => 0,
+                           'List::Util' => 0,
                            'Exception::Class' => 0,
                            'File::Spec' => 0,
                            'Class::Accessor' => 0
