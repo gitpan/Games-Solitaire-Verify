@@ -14,7 +14,7 @@ Version 0.0101
 
 =cut
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 use base 'Games::Solitaire::Verify::Base';
 
@@ -24,14 +24,18 @@ use Games::Solitaire::Verify::Column;
 use Games::Solitaire::Verify::Move;
 use Games::Solitaire::Verify::Freecells;
 use Games::Solitaire::Verify::Foundations;
+use Games::Solitaire::Verify::VariantParams;
+use Games::Solitaire::Verify::VariantsMap;
 
 use List::Util qw(first);
+use POSIX qw();
 
 __PACKAGE__->mk_accessors(qw(
     _columns
     _freecells
     _foundations
     _variant
+    _variant_params
     ));
 
 =head1 SYNOPSIS
@@ -157,19 +161,44 @@ sub _from_string
     return;
 }
 
-sub _set_variant
+sub _fill_non_custom_variant
 {
     my $self = shift;
     my $variant = shift;
 
-    if ($variant ne "freecell")
+    my $variants_map = Games::Solitaire::Verify::VariantsMap->new();
+
+    my $params = $variants_map->get_variant_by_id($variant);
+
+    if (!defined($params))
     {
         Games::Solitaire::Verify::Exception::Variant::Unknown->throw(
             error => "Unknown/Unsupported Variant",
             variant => $variant,
         );
     }
+    $self->_variant_params($params);
     $self->_variant($variant);
+
+    return;
+}
+
+sub _set_variant
+{
+    my $self = shift;
+    my $args = shift;
+
+    my $variant = $args->{variant};
+
+    if ($variant eq "custom")
+    {
+        $self->_variant($variant);
+        $self->_variant_params($args->{variant_params});
+    }
+    else
+    {
+        $self->_fill_non_custom_variant($variant);
+    }
 
     return;
 }
@@ -179,7 +208,7 @@ sub _init
     my ($self, $args) = @_;
 
     # Set the variant
-    $self->_set_variant($args->{variant});
+    $self->_set_variant($args);
 
     $self->_columns([]);
 
@@ -254,7 +283,9 @@ the foundations.
 
 sub num_decks
 {
-    return 1;
+    my $self = shift;
+
+    return $self->_variant_params->num_decks();
 }
 
 =head2 $board->num_freecells()
@@ -267,7 +298,7 @@ sub num_freecells
 {
     my $self = shift;
 
-    return 4;
+    return $self->_variant_params->num_freecells();
 }
 
 =head2 $board->num_empty_freecells()
@@ -293,7 +324,7 @@ sub num_columns
 {
     my $self = shift;
 
-    return 8;
+    return $self->_variant_params->num_columns();
 }
 
 =head2 $board->get_column($index)
@@ -377,6 +408,34 @@ sub _can_put_into_empty_column
 {
     my ($self, $card) = @_;
 
+    if ($self->_variant_params->empty_stacks_filled_by() eq "kings")
+    {
+        if ($card->rank() != 13)
+        {
+            return "Non-king on an empty stack";
+        }
+    }
+    return 0;
+}
+
+sub _is_matching_color
+{
+    my ($self, $parent, $child) = @_;
+
+    if ($self->_variant_params()->seq_build_by() eq "alt_color")
+    {
+        if ($parent->color() eq $child->color())
+        {
+            return "Cards are of the same color";
+        }
+    }
+    elsif ($self->_variant_params()->seq_build_by() eq "suit")
+    {
+        if ($parent->suit() ne $child->suit())
+        {
+            return "Suits don't match";
+        }
+    }
     return 0;
 }
 
@@ -389,9 +448,9 @@ sub _can_put_on_top
         return "Rank mismatch between parent and child cards";
     }
     
-    if ($parent->color() eq $child->color())
+    if (my $ret = $self->_is_matching_color($parent, $child) )
     {
-        return "Cards are of the same color";
+        return $ret;
     }
     
     return 0;
@@ -411,13 +470,35 @@ sub _can_put_on_column
         );
 }
 
+sub _calc_freecell_max_seq_move
+{
+    my ($self, $args) = @_;
+    my $to_empty = (defined($args->{to_empty}) ? $args->{to_empty} : 0);
+
+    return (($self->num_empty_freecells()+1) << ($self->num_empty_columns()-$to_empty))
+}
+
+sub _calc_empty_stacks_filled_by_any_card_max_seq_move
+{
+    my ($self, $args) = @_;
+
+    return 
+         +($self->_variant_params->sequence_move() eq "unlimited")
+            ? POSIX::INT_MAX()
+            : $self->_calc_freecell_max_seq_move($args)
+            ;
+}
+
 sub _calc_max_sequence_move
 {
     my ($self, $args) = @_;
 
-    my $to_empty = (defined($args->{to_empty}) ? $args->{to_empty} : 0);
-
-    return (($self->num_empty_freecells()+1) << ($self->num_empty_columns()-$to_empty));
+    return
+        (
+               ($self->_variant_params->empty_stacks_filled_by() eq "any")
+             ? $self->_calc_empty_stacks_filled_by_any_card_max_seq_move($args)
+             : ($self->num_empty_freecells() + 1)
+        );
 }
 
 sub _is_sequence_in_column

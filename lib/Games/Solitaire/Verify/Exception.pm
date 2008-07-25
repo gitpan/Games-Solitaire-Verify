@@ -12,7 +12,7 @@ classes for G::S::Verify.
 
 use vars qw($VERSION);
 
-$VERSION = '0.01';
+$VERSION = '0.03';
 
 use Exception::Class (
     'Games::Solitaire::Verify::Exception',
@@ -36,6 +36,32 @@ use Exception::Class (
     { isa => "Games::Solitaire::Verify::Exception::Parse::State", 
       fields => ["index"],
     },
+   
+    "Games::Solitaire::Verify::Exception::VariantParams::Param" =>
+    {
+        isa => "Games::Solitaire::Verify::Exception",
+        fields => ["value"],
+    },
+    "Games::Solitaire::Verify::Exception::VariantParams::Param::NumDecks" =>
+    {
+        isa => "Games::Solitaire::Verify::Exception::VariantParams::Param",
+    },
+    "Games::Solitaire::Verify::Exception::VariantParams::Param::EmptyStacksFill" =>
+    {
+        isa => "Games::Solitaire::Verify::Exception::VariantParams::Param",
+    },
+    "Games::Solitaire::Verify::Exception::VariantParams::Param::Stacks" =>
+    {
+        isa => "Games::Solitaire::Verify::Exception::VariantParams::Param",
+    },
+    "Games::Solitaire::Verify::Exception::VariantParams::Param::Freecells" =>
+    {
+        isa => "Games::Solitaire::Verify::Exception::VariantParams::Param",
+    },
+    "Games::Solitaire::Verify::Exception::VariantParams::Param::SeqMove" =>
+    {
+        isa => "Games::Solitaire::Verify::Exception::VariantParams::Param",
+    },
     
     'Games::Solitaire::Verify::Exception::Variant' =>
     { isa => "Games::Solitaire::Verify::Exception", 
@@ -43,6 +69,11 @@ use Exception::Class (
     },
     'Games::Solitaire::Verify::Exception::Variant::Unknown' =>
     { isa => "Games::Solitaire::Verify::Exception::Variant", },
+    'Games::Solitaire::Verify::Exception::VerifyMove' =>
+    { isa => "Games::Solitaire::Verify::Exception", 
+        fields => ["problem"],
+    },
+    
       );
 
 =head1 SYNOPSIS
