@@ -12,7 +12,7 @@ classes for G::S::Verify.
 
 use vars qw($VERSION);
 
-$VERSION = '0.03';
+$VERSION = '0.04';
 
 use Exception::Class (
     'Games::Solitaire::Verify::Exception',
@@ -73,7 +73,46 @@ use Exception::Class (
     { isa => "Games::Solitaire::Verify::Exception", 
         fields => ["problem"],
     },
+    'Games::Solitaire::Verify::Exception::Move' =>
+    { isa => "Games::Solitaire::Verify::Exception", 
+        fields => ["move"],
+    },
+    'Games::Solitaire::Verify::Exception::Move::NotEnoughEmpties' =>
+    { isa => "Games::Solitaire::Verify::Exception::Move", },
+    'Games::Solitaire::Verify::Exception::Move::Src' =>
+    { isa => "Games::Solitaire::Verify::Exception::Move", },
+    'Games::Solitaire::Verify::Exception::Move::Src::Col' =>
+    { isa => "Games::Solitaire::Verify::Exception::Move::Src", },
+    'Games::Solitaire::Verify::Exception::Move::Src::Col::NoCards' =>
+    { isa => "Games::Solitaire::Verify::Exception::Move::Src::Col", },
+    'Games::Solitaire::Verify::Exception::Move::Src::Col::NonSequence' =>
+    { isa => "Games::Solitaire::Verify::Exception::Move::Src::Col", 
+      fields => [qw(pos)],
+    },
+    'Games::Solitaire::Verify::Exception::Move::Src::Col::NotEnoughCards' =>
+    { isa => "Games::Solitaire::Verify::Exception::Move::Src::Col", },
     
+    'Games::Solitaire::Verify::Exception::Move::Src::Freecell::Empty' =>
+    { isa => "Games::Solitaire::Verify::Exception::Move::Src", },
+    'Games::Solitaire::Verify::Exception::Move::Dest' =>
+    { isa => "Games::Solitaire::Verify::Exception::Move", },
+    'Games::Solitaire::Verify::Exception::Move::Dest::Foundation' =>
+    { isa => "Games::Solitaire::Verify::Exception::Move::Dest", },   
+    'Games::Solitaire::Verify::Exception::Move::Dest::Freecell' =>
+    { isa => "Games::Solitaire::Verify::Exception::Move::Dest", },
+    'Games::Solitaire::Verify::Exception::Move::Dest::Col' =>
+    { isa => "Games::Solitaire::Verify::Exception::Move::Dest", },
+    'Games::Solitaire::Verify::Exception::Move::Dest::Col::NonMatchSuits' =>
+    { isa => "Games::Solitaire::Verify::Exception::Move::Dest::Col", 
+      fields => [qw(seq_build_by)],
+      },
+    'Games::Solitaire::Verify::Exception::Move::Dest::Col::OnlyKingsCanFillEmpty' =>
+    { isa => "Games::Solitaire::Verify::Exception::Move::Dest::Col", 
+      },
+    'Games::Solitaire::Verify::Exception::Move::Dest::Col::RankMismatch' =>
+    { isa => "Games::Solitaire::Verify::Exception::Move::Dest::Col", 
+      },
+      
       );
 
 =head1 SYNOPSIS
