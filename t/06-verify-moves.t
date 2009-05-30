@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 96;
+use Test::More tests => 109;
 use Games::Solitaire::Verify::State;
 use Games::Solitaire::Verify::Move;
 use Games::Solitaire::Verify::Exception;
@@ -1019,3 +1019,239 @@ EOF
         "dest() is identical in \$err->move() and original move",
     );
 }
+
+# This is from:
+# make_pysol_freecell_board.py 24 simple_simon | \
+#   fc-solve -g simple_simon -p -t -sam
+{
+    my $string = <<"EOF";
+Foundations: H-0 C-0 D-0 S-0 
+Freecells: 
+: 4C QH 3C 8C AD JH 8S KS
+: 5H 9S 6H AC 4D TD 4S 6D
+: QC 2S JC 9H QS KC 4H 8D
+: 5D KD TH 5C 3H 8H 7C
+: 2D JS KH TC 3S JD
+: 7H 5S 6S TS 9D
+: AH 6C 7D 2H
+: 7S 9C QD
+: 2C 3D
+: AS
+EOF
+    
+    my $board = Games::Solitaire::Verify::State->new(
+        {
+            string => $string,
+            variant => "simple_simon",
+        }
+    );
+
+    my $move1 = Games::Solitaire::Verify::Move->new(
+        {
+            fcs_string => "Move 1 cards from stack 4 to stack 7",
+            game => "simple_simon",
+        },
+    );
+    
+    # TEST
+    ok ($move1, "Simple Simon move was initialised.");
+
+    # TEST
+    ok (!$board->verify_and_perform_move($move1),
+        "Testing for right movement"
+    );
+
+    # TEST
+    is ($board->get_column(4)->to_string(), ": 2D JS KH TC 3S",
+        "Checking that the card was moved."
+    );
+
+    # TEST
+    is ($board->get_column(7)->to_string(), ": 7S 9C QD JD",
+        "Checking that the card was moved."
+    );
+}
+
+# This is from:
+# make_pysol_freecell_board.py 24 simple_simon | \
+#   fc-solve -g simple_simon -p -t -sam
+{
+    my $string = <<"EOF";
+Foundations: H-0 C-0 D-0 S-0 
+Freecells: 
+: 4C QH 3C 8C AD JH 8S KS
+: 5H 9S 6H AC 4D TD 4S 6D
+: QC 2S JC 9H QS KC 4H
+: 5D KD TH 5C 3H 8H 7C
+: 2D JS KH TC 3S
+: 7H 5S 6S TS 9D 8D
+: AH 6C 7D 2H
+: 7S 9C QD JD
+: 2C 3D
+: AS
+EOF
+    
+    my $board = Games::Solitaire::Verify::State->new(
+        {
+            string => $string,
+            variant => "simple_simon",
+        }
+    );
+
+    my $move1 = Games::Solitaire::Verify::Move->new(
+        {
+            fcs_string => "Move 1 cards from stack 9 to stack 6",
+            game => "simple_simon",
+        },
+    );
+    
+    # TEST
+    ok ($move1, "Simple Simon on-top-of-false seq move was initialised.");
+
+    # TEST
+    ok (!$board->verify_and_perform_move($move1),
+        "Testing for right movement in Simpsim on-top-of-false"
+    );
+
+    my $result = <<"EOF";
+Foundations: H-0 C-0 D-0 S-0 
+Freecells: 
+: 4C QH 3C 8C AD JH 8S KS
+: 5H 9S 6H AC 4D TD 4S 6D
+: QC 2S JC 9H QS KC 4H
+: 5D KD TH 5C 3H 8H 7C
+: 2D JS KH TC 3S
+: 7H 5S 6S TS 9D 8D
+: AH 6C 7D 2H AS
+: 7S 9C QD JD
+: 2C 3D
+: 
+EOF
+
+    # TEST
+    is ($board->to_string(), $result, 
+        "Move was performed correctly in simpsim on-top-of-self");
+}
+
+# This is from:
+# make_pysol_freecell_board.py 24 simple_simon | \
+#   fc-solve -g simple_simon -p -t -sam
+{
+    my $string = <<"EOF";
+Foundations: H-0 C-0 D-0 S-0 
+Freecells: 
+: 4C QH 3C 8C AD JH 8S KS
+: 5H 9S 6H AC 4D TD 4S 3S
+: QC 2S JC 9H QS KC 4H
+: 5D KD TH 5C 3H 8H 7C 6D
+: 2D JS KH TC
+: 7H 5S 6S TS 9D 8D
+: AH 6C 7D 2H AS
+: 7S 9C QD JD
+: 2C 3D
+: 
+EOF
+    
+    my $board = Games::Solitaire::Verify::State->new(
+        {
+            string => $string,
+            variant => "simple_simon",
+        }
+    );
+
+    my $move1 = Games::Solitaire::Verify::Move->new(
+        {
+            fcs_string => "Move 3 cards from stack 5 to stack 7",
+            game => "simple_simon",
+        },
+    );
+    
+    # TEST
+    ok ($move1, "Simple Simon 3 cards seq move was initialised.");
+
+    # TEST
+    ok (!$board->verify_and_perform_move($move1),
+        "Testing for right movement in Simpsim 3 cards seq move"
+    );
+
+    my $result = <<"EOF";
+Foundations: H-0 C-0 D-0 S-0 
+Freecells: 
+: 4C QH 3C 8C AD JH 8S KS
+: 5H 9S 6H AC 4D TD 4S 3S
+: QC 2S JC 9H QS KC 4H
+: 5D KD TH 5C 3H 8H 7C 6D
+: 2D JS KH TC
+: 7H 5S 6S
+: AH 6C 7D 2H AS
+: 7S 9C QD JD TS 9D 8D
+: 2C 3D
+: 
+EOF
+
+    # TEST
+    is ($board->to_string(), $result,
+        "Move was performed correctly in simpsim on-top-of-self");
+}
+
+# This is from:
+# make_pysol_freecell_board.py 24 simple_simon | \
+#   fc-solve -g simple_simon -p -t -sam
+{
+    my $string = <<"EOF";
+Foundations: H-0 C-0 D-0 S-0 
+Freecells: 
+: 4C QH 3C 2C AC
+: KC QC JC TC 9C 8C 7C 6C 5C 4D 3D 2D AD
+: 
+: 5D KD QD JD TD 9D 8D 7D 6D
+: 
+: JH TH 9H 8H 7H 6H 5H 4H 3H 2H AH
+: 
+: KH
+: 
+: KS QS JS TS 9S 8S 7S 6S 5S 4S 3S 2S AS
+EOF
+    
+    my $board = Games::Solitaire::Verify::State->new(
+        {
+            string => $string,
+            variant => "simple_simon",
+        }
+    );
+
+    my $move1 = Games::Solitaire::Verify::Move->new(
+        {
+            fcs_string => "Move the sequence on top of Stack 9 to the foundations",
+            game => "simple_simon",
+        },
+    );
+    
+    # TEST
+    ok ($move1, "Simple Simon seq->foundations move was initialised.");
+
+    # TEST
+    ok (!$board->verify_and_perform_move($move1),
+        "Testing for right movement in Simpsim seq->foundations move"
+    );
+
+    my $result = <<"EOF";
+Foundations: H-0 C-0 D-0 S-K 
+Freecells: 
+: 4C QH 3C 2C AC
+: KC QC JC TC 9C 8C 7C 6C 5C 4D 3D 2D AD
+: 
+: 5D KD QD JD TD 9D 8D 7D 6D
+: 
+: JH TH 9H 8H 7H 6H 5H 4H 3H 2H AH
+: 
+: KH
+: 
+: 
+EOF
+
+    # TEST
+    is ($board->to_string(), $result,
+        "Move was performed correctly in simpsim seq->foundations");
+}
+

@@ -14,7 +14,7 @@ Version 0.01
 
 =cut
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 use base 'Games::Solitaire::Verify::Base';
 
@@ -97,6 +97,15 @@ sub _from_fcs_string
         $self->dest($dest);
         $self->num_cards($num_cards);
     }
+    elsif ($str =~ m{\AMove the sequence on top of Stack (\d+) to the foundations\z})
+    {
+        my $source = $1;
+        
+        $self->source_type("stack_seq");
+        $self->dest_type("foundation");
+
+        $self->source($source);
+    }    
     else
     {
         Games::Solitaire::Verify::Exception::Parse::FCS->throw(
