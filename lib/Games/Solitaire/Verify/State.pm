@@ -14,7 +14,7 @@ Version 0.0101
 
 =cut
 
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 
 use base 'Games::Solitaire::Verify::Base';
 
@@ -622,9 +622,10 @@ sub _perform_move__stack_seq_to_foundation
 
     if ($rules ne "simple_simon")
     {
-        return Games::Solitaire::Verify::Exception::Move::Unsupported->new(
-            move => $move
-        );
+        return Games::Solitaire::Verify::Exception::Move::Variant::Unsupported
+            ->new(
+                move => $move
+            );
     }
 
     my $col_idx = $move->source();
@@ -644,7 +645,7 @@ sub _perform_move__stack_seq_to_foundation
 
     if ($num_seq_components != 1)
     {
-        return Games::Solitaire::Verify::Exception::Move::NotTrueSeq->new(
+        return Games::Solitaire::Verify::Exception::Move::Src::Col::NotTrueSeq->new(
             move => $move
         );
     }

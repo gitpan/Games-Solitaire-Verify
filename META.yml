@@ -1,12 +1,15 @@
 ---
 name: Games-Solitaire-Verify
-version: 0.06
+version: 0.07
 author:
   - 'Shlomi Fish <shlomif@iglu.org.il>'
 abstract: verify solutions for solitaire games.
 license: mit
 resources:
+  MailingList: http://tech.groups.yahoo.com/group/fc-solve-discuss/
+  homepage: http://fc-solve.berlios.de/verify-code/
   license: http://www.opensource.org/licenses/mit-license.php
+  repository: http://svn.berlios.de/svnroot/repos/fc-solve/trunk/Games-Solitaire-Verify/
 requires:
   Class::Accessor: 0
   Exception::Class: 0
@@ -18,41 +21,65 @@ build_requires:
 provides:
   Games::Solitaire::Verify:
     file: lib/Games/Solitaire/Verify.pm
-    version: 0.06
+    version: 0.07
   Games::Solitaire::Verify::Base:
     file: lib/Games/Solitaire/Verify/Base.pm
-    version: 0.06
+    version: 0.07
   Games::Solitaire::Verify::Card:
     file: lib/Games/Solitaire/Verify/Card.pm
-    version: 0.06
+    version: 0.07
   Games::Solitaire::Verify::Column:
     file: lib/Games/Solitaire/Verify/Column.pm
-    version: 0.06
+    version: 0.07
   Games::Solitaire::Verify::Exception:
     file: lib/Games/Solitaire/Verify/Exception.pm
-    version: 0.06
+    version: 0.07
   Games::Solitaire::Verify::Foundations:
     file: lib/Games/Solitaire/Verify/Foundations.pm
-    version: 0.06
+    version: 0.07
   Games::Solitaire::Verify::Freecells:
     file: lib/Games/Solitaire/Verify/Freecells.pm
-    version: 0.06
+    version: 0.07
   Games::Solitaire::Verify::Move:
     file: lib/Games/Solitaire/Verify/Move.pm
-    version: 0.06
+    version: 0.07
   Games::Solitaire::Verify::Solution:
     file: lib/Games/Solitaire/Verify/Solution.pm
-    version: 0.06
+    version: 0.07
   Games::Solitaire::Verify::State:
     file: lib/Games/Solitaire/Verify/State.pm
-    version: 0.06
+    version: 0.07
   Games::Solitaire::Verify::VariantParams:
     file: lib/Games/Solitaire/Verify/VariantParams.pm
-    version: 0.06
+    version: 0.07
   Games::Solitaire::Verify::VariantsMap:
     file: lib/Games/Solitaire/Verify/VariantsMap.pm
-    version: 0.06
+    version: 0.07
 generated_by: Module::Build version 0.33
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
   version: 1.4
+keywords:
+  - baker's dozen
+  - baker's game
+  - card
+  - card games
+  - cards
+  - eight off
+  - forecell
+  - foundations
+  - freecell
+  - french
+  - games
+  - moves
+  - patience
+  - seahaven
+  - seahaven towers
+  - simple simon
+  - single-player
+  - solitaire
+  - solutions
+  - solve
+  - solving
+  - verification
+  - verify

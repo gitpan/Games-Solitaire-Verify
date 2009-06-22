@@ -12,7 +12,7 @@ classes for G::S::Verify.
 
 use vars qw($VERSION);
 
-$VERSION = '0.06';
+$VERSION = '0.07';
 
 use Exception::Class (
     'Games::Solitaire::Verify::Exception',
@@ -26,6 +26,10 @@ use Exception::Class (
     { isa => "Games::Solitaire::Verify::Exception::Parse::Card", },
     'Games::Solitaire::Verify::Exception::Parse::Card::UnknownSuit' =>
     { isa => "Games::Solitaire::Verify::Exception::Parse::Card", },
+    'Games::Solitaire::Verify::Exception::Parse::Column' =>
+    { isa => "Games::Solitaire::Verify::Exception::Parse", },
+    'Games::Solitaire::Verify::Exception::Parse::Column::Prefix' =>
+    { isa => "Games::Solitaire::Verify::Exception::Parse::Column", },
     'Games::Solitaire::Verify::Exception::Parse::State' =>
     { isa => "Games::Solitaire::Verify::Exception::Parse", },
     "Games::Solitaire::Verify::Exception::Parse::State::Foundations" =>
@@ -62,6 +66,14 @@ use Exception::Class (
     {
         isa => "Games::Solitaire::Verify::Exception::VariantParams::Param",
     },
+    "Games::Solitaire::Verify::Exception::VariantParams::Param::SeqBuildBy" =>
+    {
+        isa => "Games::Solitaire::Verify::Exception::VariantParams::Param",
+    },
+    "Games::Solitaire::Verify::Exception::VariantParams::Param::Rules" =>
+    {
+        isa => "Games::Solitaire::Verify::Exception::VariantParams::Param",
+    },
     
     'Games::Solitaire::Verify::Exception::Variant' =>
     { isa => "Games::Solitaire::Verify::Exception", 
@@ -77,6 +89,8 @@ use Exception::Class (
     { isa => "Games::Solitaire::Verify::Exception", 
         fields => ["move"],
     },
+   'Games::Solitaire::Verify::Exception::Move::Variant::Unsupported' =>
+    { isa => "Games::Solitaire::Verify::Exception::Move", },
     'Games::Solitaire::Verify::Exception::Move::NotEnoughEmpties' =>
     { isa => "Games::Solitaire::Verify::Exception::Move", },
     'Games::Solitaire::Verify::Exception::Move::Src' =>
@@ -91,7 +105,8 @@ use Exception::Class (
     },
     'Games::Solitaire::Verify::Exception::Move::Src::Col::NotEnoughCards' =>
     { isa => "Games::Solitaire::Verify::Exception::Move::Src::Col", },
-    
+    'Games::Solitaire::Verify::Exception::Move::Src::Col::NotTrueSeq' =>
+    { isa => "Games::Solitaire::Verify::Exception::Move::Src::Col", },
     'Games::Solitaire::Verify::Exception::Move::Src::Freecell::Empty' =>
     { isa => "Games::Solitaire::Verify::Exception::Move::Src", },
     'Games::Solitaire::Verify::Exception::Move::Dest' =>
