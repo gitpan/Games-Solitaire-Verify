@@ -11,7 +11,7 @@ Games::Solitaire::Verify::Base - a base class.
 
 use vars qw($VERSION);
 
-$VERSION = '0.07';
+$VERSION = '0.08';
 
 use base 'Class::Accessor';
 
@@ -105,7 +105,7 @@ L<http://search.cpan.org/dist/Games-Solitaire-Verify>
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2008 Shlomi Fish, all rights reserved.
+Copyright 2008 Shlomi Fish.
 
 This program is released under the following license: MIT/X11
 ( L<http://www.opensource.org/licenses/mit-license.php> ).
