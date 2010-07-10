@@ -14,7 +14,7 @@ Version 0.0101
 
 =cut
 
-our $VERSION = '0.08';
+our $VERSION = '0.09';
 
 use base 'Games::Solitaire::Verify::Base';
 
@@ -30,14 +30,14 @@ use Games::Solitaire::Verify::VariantsMap;
 use List::Util qw(first);
 use POSIX qw();
 
-__PACKAGE__->mk_accessors(qw(
+__PACKAGE__->mk_acc_ref([qw(
     _columns
     _freecells
     _foundations
     _variant
     _variant_params
     _temp_move
-    ));
+    )]);
 
 =head1 SYNOPSIS
 

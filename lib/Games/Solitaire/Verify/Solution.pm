@@ -14,7 +14,7 @@ Version 0.0101
 
 =cut
 
-our $VERSION = '0.08';
+our $VERSION = '0.09';
 
 use base 'Games::Solitaire::Verify::Base';
 
@@ -24,7 +24,7 @@ use Games::Solitaire::Verify::Column;
 use Games::Solitaire::Verify::Move;
 use Games::Solitaire::Verify::State;
 
-__PACKAGE__->mk_accessors(qw(
+__PACKAGE__->mk_acc_ref([qw(
     _input_fh
     _line_num
     _variant
@@ -32,7 +32,7 @@ __PACKAGE__->mk_accessors(qw(
     _state
     _move
     _reached_end
-    ));
+    )]);
 
 =head1 SYNOPSIS
 

@@ -11,9 +11,9 @@ Games::Solitaire::Verify::Base - a base class.
 
 use vars qw($VERSION);
 
-$VERSION = '0.08';
+$VERSION = '0.09';
 
-use base 'Class::Accessor';
+use Class::XSAccessor;
 
 =head1 SYNOPSIS
 
@@ -58,6 +58,44 @@ sub new
     $self->_init(@_);
 
     return $self;
+}
+
+=head2 __PACKAGE__->mk_accessors(qw(method1 method2 method3))
+
+Equivalent to L<Class::Accessor>'s mk_accessors only using Class::XSAccessor.
+It beats running an ugly script on my code, and can be done at run-time.
+
+Gotta love dynamic languages like Perl 5.
+
+=cut
+
+sub mk_accessors
+{
+    my $package = shift;
+    return $package->mk_acc_ref([@_]); 
+}
+
+=head2 __PACKAGE__->mk_acc_ref([qw(method1 method2 method3)])
+
+Creates the accessors in the array-ref of names at run-time.
+
+=cut
+
+sub mk_acc_ref
+{
+    my $package = shift;
+    my $names = shift;
+
+    my $mapping = +{ map { $_ => $_ } @$names };
+
+    eval <<"EOF";
+package $package;
+
+Class::XSAccessor->import(
+    accessors => \$mapping,            
+);
+EOF
+
 }
 
 =head1 AUTHOR

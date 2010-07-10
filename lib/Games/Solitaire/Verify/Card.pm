@@ -14,17 +14,17 @@ Version 0.0101
 
 =cut
 
-our $VERSION = '0.08';
+our $VERSION = '0.09';
 
 use base 'Games::Solitaire::Verify::Base';
 
 use Games::Solitaire::Verify::Exception;
 
-__PACKAGE__->mk_accessors(qw(
+__PACKAGE__->mk_acc_ref([qw(
     rank
     suit
     _game
-    ));
+    )]);
 
 =head1 SYNOPSIS
 

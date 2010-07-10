@@ -14,13 +14,13 @@ Version 0.03
 
 =cut
 
-our $VERSION = '0.08';
+our $VERSION = '0.09';
 
 use base 'Games::Solitaire::Verify::Base';
 
 use Games::Solitaire::Verify::Exception;
 
-__PACKAGE__->mk_accessors(qw(
+__PACKAGE__->mk_acc_ref([qw(
     empty_stacks_filled_by
     num_columns
     num_decks
@@ -28,7 +28,7 @@ __PACKAGE__->mk_accessors(qw(
     rules
     seq_build_by
     sequence_move
-    ));
+    )]);
 
 =head1 SYNOPSIS
 
@@ -156,7 +156,45 @@ sub _init
     return 0;
 }
 
-=head2 $state->seq_build_by()
+=head2 $variant_params->empty_stacks_filled_by()
+
+What empty stacks can be filled by:
+
+=over 4
+
+=item * any
+
+=item * none
+
+=item * kings
+
+=back
+
+=head2 $variant_params->num_columns()
+
+The number of columns the variant has.
+
+=head2 $variant_params->num_decks()
+
+The numbe of decks the variant has.
+
+=head2 $variant_params->num_freecells()
+
+The number of freecells the variant has.
+
+=head2 $variant_params->rules()
+
+The rules by which the variant obides:
+
+=over 4
+
+=item * freecell
+
+=item * simple_simon
+
+=back
+
+=head2 $variant_params->seq_build_by()
 
 Returns the sequence build by:
 
@@ -165,6 +203,16 @@ Returns the sequence build by:
 =item * alt_color
 
 =item * suit
+
+=back
+
+=head2 $variant_params->sequence_move()
+
+=over 4
+
+=item * limited
+
+=item * unlimited
 
 =back
 
@@ -182,7 +230,13 @@ sub clone
 
     return __PACKAGE__->new(
         {
+            empty_stacks_filled_by => $self->empty_stacks_filled_by(),
+            num_columns => $self->num_columns(),
+            num_decks => $self->num_decks(),
+            num_freecells => $self->num_freecells(),
+            rules => $self->rules(),
             seq_build_by => $self->seq_build_by(),
+            sequence_move => $self->sequence_move(),
         }
     );
 }

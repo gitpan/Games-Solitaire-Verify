@@ -1,73 +1,19 @@
 ---
-name: Games-Solitaire-Verify
-version: 0.08
+abstract: 'verify solutions for solitaire games.'
 author:
   - 'Shlomi Fish <shlomif@iglu.org.il>'
-abstract: verify solutions for solitaire games.
-license: mit
-resources:
-  MailingList: http://tech.groups.yahoo.com/group/fc-solve-discuss/
-  homepage: http://fc-solve.berlios.de/verify-code/
-  license: http://www.opensource.org/licenses/mit-license.php
-  repository: http://svn.berlios.de/svnroot/repos/fc-solve/trunk/Games-Solitaire-Verify/
 build_requires:
   Test::More: 0
-requires:
-  Class::Accessor: 0
-  Exception::Class: 0
-  File::Spec: 0
-  List::Util: 0
-  base: 0
 configure_requires:
-  Module::Build: 0.3306
-provides:
-  Games::Solitaire::Verify:
-    file: lib/Games/Solitaire/Verify.pm
-    version: 0.08
-  Games::Solitaire::Verify::Base:
-    file: lib/Games/Solitaire/Verify/Base.pm
-    version: 0.08
-  Games::Solitaire::Verify::Card:
-    file: lib/Games/Solitaire/Verify/Card.pm
-    version: 0.08
-  Games::Solitaire::Verify::Column:
-    file: lib/Games/Solitaire/Verify/Column.pm
-    version: 0.08
-  Games::Solitaire::Verify::Exception:
-    file: lib/Games/Solitaire/Verify/Exception.pm
-    version: 0.08
-  Games::Solitaire::Verify::Foundations:
-    file: lib/Games/Solitaire/Verify/Foundations.pm
-    version: 0.08
-  Games::Solitaire::Verify::Freecells:
-    file: lib/Games/Solitaire/Verify/Freecells.pm
-    version: 0.08
-  Games::Solitaire::Verify::Move:
-    file: lib/Games/Solitaire/Verify/Move.pm
-    version: 0.08
-  Games::Solitaire::Verify::Solution:
-    file: lib/Games/Solitaire/Verify/Solution.pm
-    version: 0.08
-  Games::Solitaire::Verify::State:
-    file: lib/Games/Solitaire/Verify/State.pm
-    version: 0.08
-  Games::Solitaire::Verify::VariantParams:
-    file: lib/Games/Solitaire/Verify/VariantParams.pm
-    version: 0.08
-  Games::Solitaire::Verify::VariantsMap:
-    file: lib/Games/Solitaire/Verify/VariantsMap.pm
-    version: 0.08
-generated_by: Module::Build version 0.3306
-meta-spec:
-  url: http://module-build.sourceforge.net/META-spec-v1.4.html
-  version: 1.4
+  Module::Build: 0.36
+generated_by: 'Module::Build version 0.3607'
 keywords:
-  - baker's dozen
-  - baker's game
+  - "baker's dozen"
+  - "baker's game"
   - card
-  - card games
+  - 'card games'
   - cards
-  - eight off
+  - 'eight off'
   - forecell
   - foundations
   - freecell
@@ -76,8 +22,8 @@ keywords:
   - moves
   - patience
   - seahaven
-  - seahaven towers
-  - simple simon
+  - 'seahaven towers'
+  - 'simple simon'
   - single-player
   - solitaire
   - solutions
@@ -85,3 +31,60 @@ keywords:
   - solving
   - verification
   - verify
+license: mit
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: Games-Solitaire-Verify
+provides:
+  Games::Solitaire::Verify:
+    file: lib/Games/Solitaire/Verify.pm
+    version: 0.09
+  Games::Solitaire::Verify::App::CmdLine:
+    file: lib/Games/Solitaire/Verify/App/CmdLine.pm
+  Games::Solitaire::Verify::Base:
+    file: lib/Games/Solitaire/Verify/Base.pm
+    version: 0.09
+  Games::Solitaire::Verify::Card:
+    file: lib/Games/Solitaire/Verify/Card.pm
+    version: 0.09
+  Games::Solitaire::Verify::Column:
+    file: lib/Games/Solitaire/Verify/Column.pm
+    version: 0.09
+  Games::Solitaire::Verify::Exception:
+    file: lib/Games/Solitaire/Verify/Exception.pm
+    version: 0.09
+  Games::Solitaire::Verify::Foundations:
+    file: lib/Games/Solitaire/Verify/Foundations.pm
+    version: 0.09
+  Games::Solitaire::Verify::Freecells:
+    file: lib/Games/Solitaire/Verify/Freecells.pm
+    version: 0.09
+  Games::Solitaire::Verify::Move:
+    file: lib/Games/Solitaire/Verify/Move.pm
+    version: 0.09
+  Games::Solitaire::Verify::Solution:
+    file: lib/Games/Solitaire/Verify/Solution.pm
+    version: 0.09
+  Games::Solitaire::Verify::State:
+    file: lib/Games/Solitaire/Verify/State.pm
+    version: 0.09
+  Games::Solitaire::Verify::VariantParams:
+    file: lib/Games/Solitaire/Verify/VariantParams.pm
+    version: 0.09
+  Games::Solitaire::Verify::VariantsMap:
+    file: lib/Games/Solitaire/Verify/VariantsMap.pm
+    version: 0.09
+requires:
+  Class::XSAccessor: 0
+  Exception::Class: 0
+  File::Spec: 0
+  Getopt::Long: 2.36
+  List::Util: 0
+  base: 0
+resources:
+  MailingList: http://tech.groups.yahoo.com/group/fc-solve-discuss/
+  homepage: http://fc-solve.berlios.de/verify-code/
+  license: http://www.opensource.org/licenses/mit-license.php
+  repository: http://svn.berlios.de/svnroot/repos/fc-solve/trunk/Games-Solitaire-Verify/
+version: 0.09

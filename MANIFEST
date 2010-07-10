@@ -2,6 +2,7 @@ Build.PL
 Changes
 COPYING
 inc/Test/Run/Builder.pm
+lib/Games/Solitaire/Verify/App/CmdLine.pm
 lib/Games/Solitaire/Verify/Base.pm
 lib/Games/Solitaire/Verify/Card.pm
 lib/Games/Solitaire/Verify/Column.pm
@@ -18,7 +19,7 @@ Makefile.PL
 MANIFEST
 META.yml
 README
-script/verify-solution
+script/verify-solitaire-solution
 t/00-load.t
 t/01-base.t
 t/02-move.t
