@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 22;
+use Test::More tests => 31;
 use Games::Solitaire::Verify::State;
 
 {
@@ -269,3 +269,223 @@ EOF
         "Thrown a parse-column-prefix error",
     );
 }
+
+{
+    my $board = Games::Solitaire::Verify::State->new(
+        {
+            variant => "freecell",
+        }
+    );
+
+    my $column = Games::Solitaire::Verify::Column->new(
+        {
+            cards =>
+            [
+                Games::Solitaire::Verify::Card->new(
+                    {
+                        string => "KH",
+                        id => 1,
+                        data => { key => 'Foo', },
+                    },
+                ),
+                Games::Solitaire::Verify::Card->new(
+                    {
+                        string => "QS",
+                        id => 2,
+                        data => { key => 'Bar', },
+                    }
+                ),
+            ],
+        },
+    );
+
+    $board->add_column($column);
+
+    # TEST
+    is ($board->get_column(0)->pos(0)->id(), 1, "First card has ID '1'");
+
+    # TEST
+    is_deeply(
+        $board->get_column(0)->pos(0)->data(),
+        { key => 'Foo', },
+        "First card has right data()",
+    );
+
+    # TEST
+    is ($board->get_column(0)->pos(1)->id(), 2, "Second card has ID '2'");
+
+    foreach my $idx (1 .. (8-1))
+    {
+        $board->add_column(
+            Games::Solitaire::Verify::Column->new(
+                {
+                    cards => [],
+                }
+            )
+        );
+    }
+
+    $board->set_foundations(
+        Games::Solitaire::Verify::Foundations->new(
+            {
+                num_decks => $board->num_decks(),
+                string => 'Foundations: H-A C-A D-0 S-0',
+            },
+        ),
+    );
+
+    my $freecells = Games::Solitaire::Verify::Freecells->new(
+        {
+            count => 4,
+        }
+    );
+
+    $board->set_freecells($freecells);
+
+    my $copy = $board->clone();
+
+    # TEST
+    is ($copy->get_column(0)->pos(0)->id(), 1, "First card in copy has ID '1'");
+
+    # TEST
+    is_deeply (
+        $copy->get_column(0)->pos(0)->data(),
+        { key => 'Foo' }, 
+        "First card in copy has right data."
+    );
+}
+
+# Now let's test that the Freecells gets cloned appropriately.
+{
+    my $board = Games::Solitaire::Verify::State->new(
+        {
+            variant => "freecell",
+        }
+    );
+
+    my $column = Games::Solitaire::Verify::Column->new(
+        {
+            cards =>
+            [
+                Games::Solitaire::Verify::Card->new(
+                    {
+                        string => "KH",
+                        id => 1,
+                        data => { key => 'Foo', },
+                    },
+                ),
+                Games::Solitaire::Verify::Card->new(
+                    {
+                        string => "QS",
+                        id => 2,
+                        data => { key => 'Bar', },
+                    }
+                ),
+            ],
+        },
+    );
+
+    $board->add_column($column);
+
+    foreach my $idx (1 .. (8-1))
+    {
+        $board->add_column(
+            Games::Solitaire::Verify::Column->new(
+                {
+                    cards => [],
+                }
+            )
+        );
+    }
+
+    $board->set_foundations(
+        Games::Solitaire::Verify::Foundations->new(
+            {
+                num_decks => $board->num_decks(),
+                string => 'Foundations: H-A C-A D-0 S-0',
+            },
+        ),
+    );
+
+    my $freecells = Games::Solitaire::Verify::Freecells->new(
+        {
+            count => 4,
+        }
+    );
+
+    $board->set_freecells($freecells);
+
+    $board->set_freecell(0,
+        Games::Solitaire::Verify::Card->new(
+            {
+                string => "6D",
+                id => 64,
+                data => { key => 'This is 6D', },
+            },
+        )
+    );
+
+    $board->set_freecell(2,
+        Games::Solitaire::Verify::Card->new(
+            {
+                string => "TH",
+                id => 101,
+                data => { key => 'This is TH', aref => [0, 55],},
+            },
+        )
+    );
+
+    my $copy = $board->clone();
+
+    # TEST
+    is ($copy->get_freecell(0)->id(), 64, "ID of cloned freecell 0");
+
+    # TEST
+    is ($copy->get_freecell(2)->id(), 101, "ID of cloned freecell 0");
+
+    # TEST
+    is_deeply(
+        $copy->get_freecell(2)->data(),
+        {
+            key => 'This is TH',
+            aref => [0, 55],
+        },
+        'Data of Cloned Freecell #2',
+    );
+}
+
+{
+    my $num_freecells = 2;
+
+    my $string = <<'EOF';
+Foundations: H-6 C-A D-A S-4 
+Freecells:  3D  JH
+: 4C 2C 9C 8C QS JD
+: KS QH 9H
+: QC 9S 8H
+: 5C 4D 3C
+: 2D KD TH TC TD 8D 7C 6D 5S
+: 7H JS KH TS KC QD JC
+: 9D 8S
+: 7S 6C 7D 6S 5D
+EOF
+    my $two_fc_variant = Games::Solitaire::Verify::VariantsMap->new->get_variant_by_id('freecell');
+
+    $two_fc_variant->num_freecells($num_freecells);
+
+    my $board =
+        Games::Solitaire::Verify::State->new(
+            {
+                string => $string,
+                variant => 'custom',
+                variant_params => $two_fc_variant,
+            },
+        );
+
+    # TEST
+    is ($board->clone->to_string(),
+        $string,
+        "State clone works with a custom variant_params."
+    );
+}
+

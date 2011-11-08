@@ -14,7 +14,7 @@ Version 0.0101
 
 =cut
 
-our $VERSION = '0.0901';
+our $VERSION = '0.1000';
 
 use base 'Games::Solitaire::Verify::Base';
 
@@ -56,7 +56,7 @@ __PACKAGE__->mk_acc_ref([qw(
     : 7S 6C 7D 6S 5D
     EOF
 
-    # Initialise a column
+    # Initialise a board
     my $board = Games::Solitaire::Verify::State->new(
         {
             string => $board,
@@ -72,15 +72,28 @@ __PACKAGE__->mk_acc_ref([qw(
 
 =head1 FUNCTIONS
 
+=head2 $self->set_freecells($freecells)
+
+Sets the freecells' object, which should be a 
+L<Games::Solitaire::Verify::Freecells> object.
+
 =cut
 
+sub set_freecells
+{
+    my ($self,$freecells) = @_;
+
+    $self->_freecells($freecells);
+
+    return;
+}
 
 sub _assign_freecells_from_string
 {
     my $self = shift;
     my $string = shift;
 
-    $self->_freecells(
+    $self->set_freecells(
         Games::Solitaire::Verify::Freecells->new(
             {
                 count => $self->num_freecells(),
@@ -92,11 +105,34 @@ sub _assign_freecells_from_string
     return;
 }
 
-sub _add_column
+=head2 $self->add_column($columns)
+
+Adds a new column of cards that should be an
+L<Games::Solitaire::Verify::Column> object.
+
+=cut
+
+sub add_column
 {
     my ($self, $col) = @_;
 
     push @{$self->_columns()}, $col;
+
+    return;
+}
+
+=head2 $self->set_foundations($foundations);
+
+Sets the foundations to a value. Should be isa
+L<Games::Solitaire::Verify::Foundations> .
+
+=cut
+
+sub set_foundations
+{
+    my ($self,$foundations) = @_;
+
+    $self->_foundations($foundations);
 
     return;
 }
@@ -122,10 +158,10 @@ sub _from_string
     }
     my $founds_s = $1;
 
-    $self->_foundations(
+    $self->set_foundations(
         Games::Solitaire::Verify::Foundations->new(
             {
-               num_decks => $self->num_decks(),
+                num_decks => $self->num_decks(),
                 string => $founds_s,
             }
         )
@@ -150,7 +186,7 @@ sub _from_string
         }
         my $column_str = $1;
 
-        $self->_add_column(
+        $self->add_column(
             Games::Solitaire::Verify::Column->new(
                 {
                     string => $column_str,
@@ -373,20 +409,25 @@ sub clone
 {
     my $self = shift;
 
+    my $variant = $self->_variant;
     my $copy = Games::Solitaire::Verify::State->new(
         {
-            variant => $self->_variant(),
+            variant => $variant,
+            (($variant eq "custom")
+                ? (variant_params => $self->_variant_params()) 
+                : ()
+            ),
         }
     );
 
     foreach my $idx (0 .. ($self->num_columns()-1))
     {
-        $copy->_add_column(
+        $copy->add_column(
             $self->get_column($idx)->clone()
         );
     }
 
-    $copy->_foundations(
+    $copy->set_foundations(
         $self->_foundations()->clone()
     );
 

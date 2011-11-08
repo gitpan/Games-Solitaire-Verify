@@ -1,5 +1,19 @@
 Revision history for Games-Solitaire-Verify
 
+0.1000  Tue Nov  8 20:07:13 IST 2011
+        - Add the script/tag-release.pl to tag a release in Subversion.
+        - Add script/bump-version-number.pl .
+        - lib/Games/Solitaire/Verify/Card.pm :
+            - Add the id() slot.
+            - Add the data() slot.
+        - lib/Games/Solitaire/Verify/State.pm :
+            - Add the add_column method.
+            - Add the set_foundations() method.
+            - Add the set_freecells() method.
+        - lib/Games/Solitaire/Verify/State.pm :
+            - Fix cloning of states with a "custom" variant and with 
+            variant_params.
+
 0.0901  Thu Jun  2 21:24:24 IDT 2011
         - Now importing Dumper from Data::Dumper properly.
 

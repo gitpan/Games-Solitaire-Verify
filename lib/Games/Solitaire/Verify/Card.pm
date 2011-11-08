@@ -14,13 +14,15 @@ Version 0.0101
 
 =cut
 
-our $VERSION = '0.0901';
+our $VERSION = '0.1000';
 
 use base 'Games::Solitaire::Verify::Base';
 
 use Games::Solitaire::Verify::Exception;
 
 __PACKAGE__->mk_acc_ref([qw(
+    data
+    id
     rank
     suit
     _game
@@ -34,6 +36,8 @@ __PACKAGE__->mk_acc_ref([qw(
     my $queen_of_hearts = Games::Solitaire::Verify::Card->new(
         {
             string => "QH",
+            id => 4,
+            data => { %DATA },
         },
     );
 
@@ -157,6 +161,8 @@ sub _from_string
             error => "unknown suit",
         );
     }
+
+    return;
 }
 
 sub _init
@@ -165,14 +171,33 @@ sub _init
 
     if (exists($args->{string}))
     {
-        return $self->_from_string($args->{string});
+        $self->_from_string($args->{string});
     }
+
+    if (exists($args->{id}))
+    {
+        $self->id($args->{id});
+    }
+
+    if (exists($args->{data}))
+    {
+        $self->data($args->{data});
+    }
+
+    return;
 }
 
+=head2 $card->data()
+
+Arbitrary data that is associated with the card. Can hold any scalar.
+
+=head2 $card->id()
+
+A simple identifier that identifies the card. Should be a string.
 
 =head2 $card->rank()
 
-Returns the rank of the card as an integer. Ace is 1, 2-10 are 2-20;
+Returns the rank of the card as an integer. Ace is 1, 2-10 are 2-10;
 J is 11, Q is 12 and K is 13.
 
 =head2 $card->suit()
@@ -204,6 +229,8 @@ sub clone
 
     my $new_card = Games::Solitaire::Verify::Card->new();
 
+    $new_card->data($self->data());
+    $new_card->id($self->id());
     $new_card->suit($self->suit());
     $new_card->rank($self->rank());
 
