@@ -14,7 +14,7 @@ Version 0.0101
 
 =cut
 
-our $VERSION = '0.1000';
+our $VERSION = '0.1001';
 
 use base 'Games::Solitaire::Verify::Base';
 
@@ -76,9 +76,9 @@ sub _from_string
     $self->_cards(
         [
             map
-            { 
+            {
                 Games::Solitaire::Verify::Card->new(
-                    {string => $_ } 
+                    {string => $_ }
                 )
             }
             @cards
@@ -135,7 +135,7 @@ sub pos
     return $self->_cards->[$idx];
 }
 
-=head2 $columnt->top()
+=head2 $column->top()
 
 Returns the top card.
 

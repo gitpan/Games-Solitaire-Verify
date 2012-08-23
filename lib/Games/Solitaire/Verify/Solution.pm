@@ -14,7 +14,7 @@ Version 0.0101
 
 =cut
 
-our $VERSION = '0.1000';
+our $VERSION = '0.1001';
 
 use base 'Games::Solitaire::Verify::Base';
 
@@ -52,7 +52,7 @@ __PACKAGE__->mk_acc_ref([qw(
     );
 
     my $ret = $solution->verify();
-    
+
     close($input_fh);
 
     if (!$ret)
@@ -72,7 +72,7 @@ Constructs a new solution verifier with the variant $variant (see
 L<Games::Solitaire::Verify::VariantsMap> ), and the input file handle
 $input_fh.
 
-If $variant is C<"custom">, then the constructor also requires a 
+If $variant is C<"custom">, then the constructor also requires a
 C<'variant_params'> key which should be a populated
 L<Games::Solitaire::Verify::VariantParams> object.
 

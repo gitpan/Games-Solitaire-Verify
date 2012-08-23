@@ -5,9 +5,9 @@ author:
 build_requires:
   Test::More: 0
 configure_requires:
-  Module::Build: 0.38
+  Module::Build: 0.39
 dynamic_config: 1
-generated_by: 'Module::Build version 0.38, CPAN::Meta::Converter version 2.112621'
+generated_by: 'Module::Build version 0.3901, CPAN::Meta::Converter version 2.120921'
 keywords:
   - "baker's dozen"
   - "baker's game"
@@ -40,43 +40,43 @@ name: Games-Solitaire-Verify
 provides:
   Games::Solitaire::Verify:
     file: lib/Games/Solitaire/Verify.pm
-    version: 0.1000
+    version: 0.1001
   Games::Solitaire::Verify::App::CmdLine:
     file: lib/Games/Solitaire/Verify/App/CmdLine.pm
     version: 0
   Games::Solitaire::Verify::Base:
     file: lib/Games/Solitaire/Verify/Base.pm
-    version: 0.1000
+    version: 0.1001
   Games::Solitaire::Verify::Card:
     file: lib/Games/Solitaire/Verify/Card.pm
-    version: 0.1000
+    version: 0.1001
   Games::Solitaire::Verify::Column:
     file: lib/Games/Solitaire/Verify/Column.pm
-    version: 0.1000
+    version: 0.1001
   Games::Solitaire::Verify::Exception:
     file: lib/Games/Solitaire/Verify/Exception.pm
-    version: 0.1000
+    version: 0.1001
   Games::Solitaire::Verify::Foundations:
     file: lib/Games/Solitaire/Verify/Foundations.pm
-    version: 0.1000
+    version: 0.1001
   Games::Solitaire::Verify::Freecells:
     file: lib/Games/Solitaire/Verify/Freecells.pm
-    version: 0.1000
+    version: 0.1001
   Games::Solitaire::Verify::Move:
     file: lib/Games/Solitaire/Verify/Move.pm
-    version: 0.1000
+    version: 0.1001
   Games::Solitaire::Verify::Solution:
     file: lib/Games/Solitaire/Verify/Solution.pm
-    version: 0.1000
+    version: 0.1001
   Games::Solitaire::Verify::State:
     file: lib/Games/Solitaire/Verify/State.pm
-    version: 0.1000
+    version: 0.1001
   Games::Solitaire::Verify::VariantParams:
     file: lib/Games/Solitaire/Verify/VariantParams.pm
-    version: 0.1000
+    version: 0.1001
   Games::Solitaire::Verify::VariantsMap:
     file: lib/Games/Solitaire/Verify/VariantsMap.pm
-    version: 0.1000
+    version: 0.1001
 requires:
   Class::XSAccessor: 0
   Exception::Class: 0
@@ -86,7 +86,7 @@ requires:
   base: 0
 resources:
   homepage: http://fc-solve.shlomifish.org/verify-code/
-  license: http://opensource.org/licenses/mit-license.php
+  license: http://www.opensource.org/licenses/mit-license.php
   repository: http://fc-solve.googlecode.com/svn/fc-solve/trunk/Games-Solitaire-Verify/Games-Solitaire-Verify
   x_MailingList: http://tech.groups.yahoo.com/group/fc-solve-discuss/
-version: 0.1000
+version: 0.1001

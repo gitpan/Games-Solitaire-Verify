@@ -5,7 +5,7 @@ use strict;
 
 =head1 NAME
 
-Games::Solitaire::Verify::Card - a class wrapper for an individual 
+Games::Solitaire::Verify::Card - a class wrapper for an individual
 Solitaire card.
 
 =head1 VERSION
@@ -14,7 +14,7 @@ Version 0.0101
 
 =cut
 
-our $VERSION = '0.1000';
+our $VERSION = '0.1001';
 
 use base 'Games::Solitaire::Verify::Base';
 
@@ -59,8 +59,8 @@ sub _card_num_normalize
     }
 }
 
-my @card_nums =  (map { _card_num_normalize($_) } 
-    ("A", (2 .. 9), 
+my @card_nums =  (map { _card_num_normalize($_) }
+    ("A", (2 .. 9),
     {
         't' => "T",
         'non_t' => "10",
@@ -214,7 +214,20 @@ sub color
 {
     my ($self) = @_;
 
-    return $suits_map{$self->suit()}->{'color'};
+    return $self->color_for_suit($self->suit());
+}
+
+=head2 $card->color_for_suit($suit)
+
+Get the color of the suit $suit (which may be different than the card's suit).
+
+=cut
+
+sub color_for_suit
+{
+    my ($self, $suit) = @_;
+
+    return $suits_map{$suit}->{'color'};
 }
 
 =head2 my $copy = $card->clone();
