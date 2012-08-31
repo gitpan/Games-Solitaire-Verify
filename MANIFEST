@@ -1,6 +1,7 @@
 Build.PL
 Changes
 COPYING
+examples/expand-moves-driver.pl
 inc/Test/Run/Builder.pm
 lib/Games/Solitaire/Verify/App/CmdLine.pm
 lib/Games/Solitaire/Verify/Base.pm
@@ -12,6 +13,7 @@ lib/Games/Solitaire/Verify/Freecells.pm
 lib/Games/Solitaire/Verify/Move.pm
 lib/Games/Solitaire/Verify.pm
 lib/Games/Solitaire/Verify/Solution.pm
+lib/Games/Solitaire/Verify/Solution/ExpandMultiCardMoves.pm
 lib/Games/Solitaire/Verify/State.pm
 lib/Games/Solitaire/Verify/VariantParams.pm
 lib/Games/Solitaire/Verify/VariantsMap.pm
@@ -22,6 +24,7 @@ README
 script/bump-version-number.pl
 script/tag-release.pl
 script/verify-solitaire-solution
+script/expand-solitaire-multi-card-moves
 t/00-load.t
 t/01-base.t
 t/02-move.t
@@ -30,6 +33,7 @@ t/04-column.t
 t/05-state.t
 t/06-verify-moves.t
 t/07-solution.t
+t/08-expand-solution.t
 t/data/sample-solutions/fcs-bakers-game-24.txt
 t/data/sample-solutions/fcs-eight-off-200-l-gi.txt
 t/data/sample-solutions/fcs-eight-off-200.txt
@@ -37,6 +41,8 @@ t/data/sample-solutions/fcs-forecell-24.txt
 t/data/sample-solutions/fcs-freecell-24.txt
 t/data/sample-solutions/fcs-freecell-24-wrong-1.txt
 t/data/sample-solutions/fcs-freecell-24-wrong-2.txt
+t/data/sample-solutions/fcs-freecell-9-expanded.txt
+t/data/sample-solutions/fcs-freecell-9-orig.txt
 t/data/sample-solutions/fcs-larrysan-kings-only-0-freecells-unlimited-move.txt
 t/data/sample-solutions/fcs-relaxed-freecell-11982.txt
 t/data/sample-solutions/fcs-seahaven-towers-1977.txt

@@ -14,7 +14,7 @@ Version 0.0101
 
 =cut
 
-our $VERSION = '0.1001';
+our $VERSION = '0.1100';
 
 use base 'Games::Solitaire::Verify::Base';
 
@@ -55,7 +55,7 @@ __PACKAGE__->mk_acc_ref([qw(
 
     close($input_fh);
 
-    if (!$ret)
+    if ($ret)
     {
         die $ret;
     }

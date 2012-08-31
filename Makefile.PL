@@ -15,6 +15,7 @@ WriteMakefile
                  },
   'INSTALLDIRS' => 'site',
   'EXE_FILES' => [
+                   'script/expand-solitaire-multi-card-moves',
                    'script/verify-solitaire-solution'
                  ],
   'PL_FILES' => {}
