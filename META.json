@@ -41,7 +41,8 @@
    "prereqs" : {
       "build" : {
          "requires" : {
-            "Test::More" : "0"
+            "Test::More" : "0",
+            "autodie" : "0"
          }
       },
       "configure" : {
@@ -56,14 +57,16 @@
             "File::Spec" : "0",
             "Getopt::Long" : "2.36",
             "List::Util" : "0",
-            "base" : "0"
+            "base" : "0",
+            "strict" : "0",
+            "warnings" : "0"
          }
       }
    },
    "provides" : {
       "Games::Solitaire::Verify" : {
          "file" : "lib/Games/Solitaire/Verify.pm",
-         "version" : "0.1100"
+         "version" : "0.1101"
       },
       "Games::Solitaire::Verify::App::CmdLine" : {
          "file" : "lib/Games/Solitaire/Verify/App/CmdLine.pm",
@@ -71,51 +74,51 @@
       },
       "Games::Solitaire::Verify::Base" : {
          "file" : "lib/Games/Solitaire/Verify/Base.pm",
-         "version" : "0.1100"
+         "version" : "0.1101"
       },
       "Games::Solitaire::Verify::Card" : {
          "file" : "lib/Games/Solitaire/Verify/Card.pm",
-         "version" : "0.1100"
+         "version" : "0.1101"
       },
       "Games::Solitaire::Verify::Column" : {
          "file" : "lib/Games/Solitaire/Verify/Column.pm",
-         "version" : "0.1100"
+         "version" : "0.1101"
       },
       "Games::Solitaire::Verify::Exception" : {
          "file" : "lib/Games/Solitaire/Verify/Exception.pm",
-         "version" : "0.1100"
+         "version" : "0.1101"
       },
       "Games::Solitaire::Verify::Foundations" : {
          "file" : "lib/Games/Solitaire/Verify/Foundations.pm",
-         "version" : "0.1100"
+         "version" : "0.1101"
       },
       "Games::Solitaire::Verify::Freecells" : {
          "file" : "lib/Games/Solitaire/Verify/Freecells.pm",
-         "version" : "0.1100"
+         "version" : "0.1101"
       },
       "Games::Solitaire::Verify::Move" : {
          "file" : "lib/Games/Solitaire/Verify/Move.pm",
-         "version" : "0.1100"
+         "version" : "0.1101"
       },
       "Games::Solitaire::Verify::Solution" : {
          "file" : "lib/Games/Solitaire/Verify/Solution.pm",
-         "version" : "0.1100"
+         "version" : "0.1101"
       },
       "Games::Solitaire::Verify::Solution::ExpandMultiCardMoves" : {
          "file" : "lib/Games/Solitaire/Verify/Solution/ExpandMultiCardMoves.pm",
-         "version" : "0.1100"
+         "version" : "0.1101"
       },
       "Games::Solitaire::Verify::State" : {
          "file" : "lib/Games/Solitaire/Verify/State.pm",
-         "version" : "0.1100"
+         "version" : "0.1101"
       },
       "Games::Solitaire::Verify::VariantParams" : {
          "file" : "lib/Games/Solitaire/Verify/VariantParams.pm",
-         "version" : "0.1100"
+         "version" : "0.1101"
       },
       "Games::Solitaire::Verify::VariantsMap" : {
          "file" : "lib/Games/Solitaire/Verify/VariantsMap.pm",
-         "version" : "0.1100"
+         "version" : "0.1101"
       }
    },
    "release_status" : "stable",
@@ -129,5 +132,5 @@
       },
       "x_MailingList" : "http://tech.groups.yahoo.com/group/fc-solve-discuss/"
    },
-   "version" : "0.1100"
+   "version" : "0.1101"
 }

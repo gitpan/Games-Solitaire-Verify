@@ -11,7 +11,10 @@ WriteMakefile
                    'Getopt::Long' => '2.36',
                    'List::Util' => 0,
                    'Test::More' => 0,
-                   'base' => 0
+                   'autodie' => 0,
+                   'base' => 0,
+                   'strict' => 0,
+                   'warnings' => 0
                  },
   'INSTALLDIRS' => 'site',
   'EXE_FILES' => [
