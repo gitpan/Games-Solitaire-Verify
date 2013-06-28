@@ -13,6 +13,7 @@ WriteMakefile
                    'Test::More' => 0,
                    'autodie' => 0,
                    'base' => 0,
+                   'parent' => 0,
                    'strict' => 0,
                    'warnings' => 0
                  },

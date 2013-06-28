@@ -5,7 +5,7 @@ use warnings;
 
 require Games::Solitaire::Verify::VariantParams;
 
-use base 'Games::Solitaire::Verify::Base';
+use parent 'Games::Solitaire::Verify::Base';
 
 =head1 NAME
 
@@ -18,7 +18,7 @@ Version 0.03
 
 =cut
 
-our $VERSION = '0.1200';
+our $VERSION = '0.1201';
 
 sub _init
 {
