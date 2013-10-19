@@ -1,14 +1,14 @@
 ---
 abstract: 'verify solutions for solitaire games.'
 author:
-  - 'Shlomi Fish <shlomif@iglu.org.il>'
+  - 'Shlomi Fish <shlomif@cpan.org>'
 build_requires:
   Test::More: 0
   autodie: 0
 configure_requires:
   Module::Build: 0.36
 dynamic_config: 1
-generated_by: 'Module::Build version 0.4005, CPAN::Meta::Converter version 2.131560'
+generated_by: 'Module::Build version 0.4007, CPAN::Meta::Converter version 2.132830'
 keywords:
   - "baker's dozen"
   - "baker's game"
@@ -41,52 +41,52 @@ name: Games-Solitaire-Verify
 provides:
   Games::Solitaire::Verify:
     file: lib/Games/Solitaire/Verify.pm
-    version: 0.1201
+    version: 0.1202
   Games::Solitaire::Verify::App::CmdLine:
     file: lib/Games/Solitaire/Verify/App/CmdLine.pm
-    version: 0.1201
+    version: 0.1202
   Games::Solitaire::Verify::App::CmdLine::Expand:
     file: lib/Games/Solitaire/Verify/App/CmdLine/Expand.pm
-    version: 0.1201
+    version: 0.1202
   Games::Solitaire::Verify::Base:
     file: lib/Games/Solitaire/Verify/Base.pm
-    version: 0.1201
+    version: 0.1202
   Games::Solitaire::Verify::Card:
     file: lib/Games/Solitaire/Verify/Card.pm
-    version: 0.1201
+    version: 0.1202
   Games::Solitaire::Verify::Column:
     file: lib/Games/Solitaire/Verify/Column.pm
-    version: 0.1201
+    version: 0.1202
   Games::Solitaire::Verify::Exception:
     file: lib/Games/Solitaire/Verify/Exception.pm
-    version: 0.1201
+    version: 0.1202
   Games::Solitaire::Verify::Foundations:
     file: lib/Games/Solitaire/Verify/Foundations.pm
-    version: 0.1201
+    version: 0.1202
   Games::Solitaire::Verify::Freecells:
     file: lib/Games/Solitaire/Verify/Freecells.pm
-    version: 0.1201
+    version: 0.1202
   Games::Solitaire::Verify::KlondikeTalon:
     file: lib/Games/Solitaire/Verify/KlondikeTalon.pm
-    version: 0.1201
+    version: 0.1202
   Games::Solitaire::Verify::Move:
     file: lib/Games/Solitaire/Verify/Move.pm
-    version: 0.1201
+    version: 0.1202
   Games::Solitaire::Verify::Solution:
     file: lib/Games/Solitaire/Verify/Solution.pm
-    version: 0.1201
+    version: 0.1202
   Games::Solitaire::Verify::Solution::ExpandMultiCardMoves:
     file: lib/Games/Solitaire/Verify/Solution/ExpandMultiCardMoves.pm
-    version: 0.1201
+    version: 0.1202
   Games::Solitaire::Verify::State:
     file: lib/Games/Solitaire/Verify/State.pm
-    version: 0.1201
+    version: 0.1202
   Games::Solitaire::Verify::VariantParams:
     file: lib/Games/Solitaire/Verify/VariantParams.pm
-    version: 0.1201
+    version: 0.1202
   Games::Solitaire::Verify::VariantsMap:
     file: lib/Games/Solitaire/Verify/VariantsMap.pm
-    version: 0.1201
+    version: 0.1202
 requires:
   Class::XSAccessor: 0
   Exception::Class: 0
@@ -102,4 +102,4 @@ resources:
   homepage: http://fc-solve.shlomifish.org/verify-code/
   license: http://www.opensource.org/licenses/mit-license.php
   repository: http://bitbucket.org/shlomif/fc-solve
-version: 0.1201
+version: 0.1202

@@ -12,7 +12,7 @@ classes for G::S::Verify.
 
 use vars qw($VERSION);
 
-$VERSION = '0.1201';
+$VERSION = '0.1202';
 
 use Exception::Class (
     'Games::Solitaire::Verify::Exception',
@@ -150,7 +150,7 @@ The constructor. Blesses and calls _init() .
 
 =head1 AUTHOR
 
-Shlomi Fish, C<< <shlomif at iglu.org.il> >>
+Shlomi Fish, L<http://www.shlomifish.org/>.
 
 =head1 BUGS
 

@@ -12,7 +12,7 @@ use Getopt::Long qw(GetOptionsFromArray);
 use Games::Solitaire::Verify::VariantsMap;
 use Games::Solitaire::Verify::Solution;
 
-our $VERSION = '0.1201';
+our $VERSION = '0.1202';
 
 __PACKAGE__->mk_acc_ref(
     [
@@ -189,7 +189,7 @@ Actually executed the command-line application.
 
 =head1 AUTHOR
 
-Shlomi Fish, C<< <shlomif@iglu.org.il> >>
+Shlomi Fish, L<http://www.shlomifish.org/>.
 
 =head1 BUGS
 

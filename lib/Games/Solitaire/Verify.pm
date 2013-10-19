@@ -13,7 +13,7 @@ Version 0.02
 
 =cut
 
-our $VERSION = '0.1201';
+our $VERSION = '0.1202';
 
 =head1 SYNOPSIS
 
@@ -49,7 +49,7 @@ L<Games::Solitaire::Verify::Solution> , L<Games::Solitaire::Verify::State>
 
 =head1 AUTHOR
 
-Shlomi Fish, C<< <shlomif at iglu.org.il> >>
+Shlomi Fish, L<http://www.shlomifish.org/>.
 
 =head1 BUGS
 

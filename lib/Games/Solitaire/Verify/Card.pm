@@ -16,7 +16,7 @@ Version 0.0101
 
 =cut
 
-our $VERSION = '0.1201';
+our $VERSION = '0.1202';
 
 use parent 'Games::Solitaire::Verify::Base';
 
@@ -332,7 +332,7 @@ sub set_flipped
 
 =head1 AUTHOR
 
-Shlomi Fish, C<< <shlomif at iglu.org.il> >>
+Shlomi Fish, L<http://www.shlomifish.org/>.
 
 =head1 BUGS
 
