@@ -41,52 +41,52 @@ name: Games-Solitaire-Verify
 provides:
   Games::Solitaire::Verify:
     file: lib/Games/Solitaire/Verify.pm
-    version: 0.1202
+    version: 0.1203
   Games::Solitaire::Verify::App::CmdLine:
     file: lib/Games/Solitaire/Verify/App/CmdLine.pm
-    version: 0.1202
+    version: 0.1203
   Games::Solitaire::Verify::App::CmdLine::Expand:
     file: lib/Games/Solitaire/Verify/App/CmdLine/Expand.pm
-    version: 0.1202
+    version: 0.1203
   Games::Solitaire::Verify::Base:
     file: lib/Games/Solitaire/Verify/Base.pm
-    version: 0.1202
+    version: 0.1203
   Games::Solitaire::Verify::Card:
     file: lib/Games/Solitaire/Verify/Card.pm
-    version: 0.1202
+    version: 0.1203
   Games::Solitaire::Verify::Column:
     file: lib/Games/Solitaire/Verify/Column.pm
-    version: 0.1202
+    version: 0.1203
   Games::Solitaire::Verify::Exception:
     file: lib/Games/Solitaire/Verify/Exception.pm
-    version: 0.1202
+    version: 0.1203
   Games::Solitaire::Verify::Foundations:
     file: lib/Games/Solitaire/Verify/Foundations.pm
-    version: 0.1202
+    version: 0.1203
   Games::Solitaire::Verify::Freecells:
     file: lib/Games/Solitaire/Verify/Freecells.pm
-    version: 0.1202
+    version: 0.1203
   Games::Solitaire::Verify::KlondikeTalon:
     file: lib/Games/Solitaire/Verify/KlondikeTalon.pm
-    version: 0.1202
+    version: 0.1203
   Games::Solitaire::Verify::Move:
     file: lib/Games/Solitaire/Verify/Move.pm
-    version: 0.1202
+    version: 0.1203
   Games::Solitaire::Verify::Solution:
     file: lib/Games/Solitaire/Verify/Solution.pm
-    version: 0.1202
+    version: 0.1203
   Games::Solitaire::Verify::Solution::ExpandMultiCardMoves:
     file: lib/Games/Solitaire/Verify/Solution/ExpandMultiCardMoves.pm
-    version: 0.1202
+    version: 0.1203
   Games::Solitaire::Verify::State:
     file: lib/Games/Solitaire/Verify/State.pm
-    version: 0.1202
+    version: 0.1203
   Games::Solitaire::Verify::VariantParams:
     file: lib/Games/Solitaire/Verify/VariantParams.pm
-    version: 0.1202
+    version: 0.1203
   Games::Solitaire::Verify::VariantsMap:
     file: lib/Games/Solitaire/Verify/VariantsMap.pm
-    version: 0.1202
+    version: 0.1203
 requires:
   Class::XSAccessor: 0
   Exception::Class: 0
@@ -95,6 +95,7 @@ requires:
   List::Util: 0
   base: 0
   parent: 0
+  perl: 5.008
   strict: 0
   warnings: 0
 resources:
@@ -102,4 +103,4 @@ resources:
   homepage: http://fc-solve.shlomifish.org/verify-code/
   license: http://www.opensource.org/licenses/mit-license.php
   repository: http://bitbucket.org/shlomif/fc-solve
-version: 0.1202
+version: 0.1203

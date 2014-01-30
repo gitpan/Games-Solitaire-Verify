@@ -3,6 +3,8 @@ package Games::Solitaire::Verify::Solution;
 use warnings;
 use strict;
 
+use 5.008;
+
 =head1 NAME
 
 Games::Solitaire::Verify::Solution - verify an entire solution
@@ -14,7 +16,7 @@ Version 0.0101
 
 =cut
 
-our $VERSION = '0.1202';
+our $VERSION = '0.1203';
 
 use parent 'Games::Solitaire::Verify::Base';
 

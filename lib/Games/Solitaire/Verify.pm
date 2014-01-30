@@ -3,6 +3,8 @@ package Games::Solitaire::Verify;
 use warnings;
 use strict;
 
+use 5.008;
+
 =head1 NAME
 
 Games::Solitaire::Verify - verify solutions for solitaire games.
@@ -13,7 +15,7 @@ Version 0.02
 
 =cut
 
-our $VERSION = '0.1202';
+our $VERSION = '0.1203';
 
 =head1 SYNOPSIS
 
