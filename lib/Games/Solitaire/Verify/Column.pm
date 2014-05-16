@@ -14,7 +14,7 @@ Version 0.0101
 
 =cut
 
-our $VERSION = '0.1203';
+our $VERSION = '0.1300';
 
 use parent 'Games::Solitaire::Verify::Base';
 
@@ -23,6 +23,7 @@ use Games::Solitaire::Verify::Card;
 
 __PACKAGE__->mk_acc_ref([qw(
     _cards
+    _s
     )]);
 
 =head1 SYNOPSIS
@@ -44,20 +45,6 @@ __PACKAGE__->mk_acc_ref([qw(
 =head1 FUNCTIONS
 
 =cut
-
-sub _card_num_normalize
-{
-    my $arg = shift;
-
-    if (ref($arg) eq "")
-    {
-        return +{ map { $_ => $arg } (qw(t non_t)) };
-    }
-    else
-    {
-        return $arg
-    }
-}
 
 sub _from_string
 {
@@ -85,6 +72,8 @@ sub _from_string
         ]
     );
 
+    $self->_recalc;
+
     return;
 }
 
@@ -99,6 +88,8 @@ sub _init
     elsif (exists($args->{cards}))
     {
         $self->_cards($args->{cards});
+
+        $self->_recalc;
         return;
     }
     else
@@ -180,6 +171,10 @@ sub append
     my $more_copy = $more_cards->clone();
 
     push @{$self->_cards()}, @{$more_copy->_cards()};
+
+    $self->_recalc;
+
+    return;
 }
 
 =head2 $column->push($card)
@@ -193,6 +188,10 @@ sub push
     my ($self, $card) = @_;
 
     push @{$self->_cards()}, $card;
+
+    $self->_recalc;
+
+    return;
 }
 
 =head2 my $card_at_top = $column->pop()
@@ -205,7 +204,11 @@ sub pop
 {
     my $self = shift;
 
-    return pop(@{$self->_cards()});
+    my $card = pop(@{$self->_cards()});
+
+    $self->_recalc;
+
+    return $card;
 }
 
 =head2 $column->to_string()
@@ -214,16 +217,25 @@ Converts to a string.
 
 =cut
 
-sub to_string
+sub _recalc
 {
     my $self = shift;
 
-    return ":" .
+    $self->_s(
+        ":" .
         ($self->len()
             ? $self->_non_zero_cards_string()
             : " " # We need the single trailing space for
                   # Freecell Solver compatibility
-        );
+        )
+    );
+
+    return;
+}
+
+sub to_string
+{
+    return shift->_s;
 }
 
 sub _non_zero_cards_string
@@ -232,8 +244,8 @@ sub _non_zero_cards_string
 
     return join("",
             (map
-                { " " . $self->pos($_)->to_string() }
-                (0 .. ($self->len()-1))
+                { " " . $_->fast_s() }
+                @{$self->_cards()}
             )
         );
 }

@@ -16,7 +16,7 @@ Version 0.0101
 
 =cut
 
-our $VERSION = '0.1203';
+our $VERSION = '0.1300';
 
 use parent 'Games::Solitaire::Verify::Base';
 
@@ -24,6 +24,7 @@ use Games::Solitaire::Verify::Exception;
 
 __PACKAGE__->mk_acc_ref([qw(
     _flipped
+    _s
     data
     id
     rank
@@ -47,6 +48,15 @@ __PACKAGE__->mk_acc_ref([qw(
 =head1 FUNCTIONS
 
 =cut
+
+sub _recalc
+{
+    my ($self) = @_;
+
+    $self->_s($self->to_string());
+
+    return;
+}
 
 sub _card_num_normalize
 {
@@ -184,6 +194,7 @@ sub _init
     if (exists($args->{string}))
     {
         $self->_from_string($args->{string});
+        $self->_recalc();
     }
 
     if (exists($args->{id}))
@@ -195,6 +206,7 @@ sub _init
     {
         $self->data($args->{data});
     }
+
 
     return;
 }
@@ -259,6 +271,8 @@ sub clone
     $new_card->suit($self->suit());
     $new_card->rank($self->rank());
 
+    $new_card->_recalc();
+
     return $new_card;
 }
 
@@ -284,24 +298,33 @@ sub to_string
     return ($self->is_flipped ? "<$s>" : $s);
 }
 
+=head2 $class->fast_s()
+
+A cached string representation. (Use with care).
+
+=cut
+
+sub fast_s
+{
+    return shift->_s;
+}
+
 =head2 $class->rank_to_string($rank_idx)
 
 Converts the rank to a string.
 
 =cut
 
+{
+    my @_t_nums = ('0', (map { $_->{t} } @card_nums));
+
 sub rank_to_string
 {
     my ($class, $rank) = @_;
 
-    if ($rank == 0)
-    {
-        return '0';
-    }
-    else
-    {
-        return $card_nums[$rank-1]->{t};
-    }
+    return $_t_nums[$rank];
+}
+
 }
 
 =head2 $card->is_flipped()
@@ -326,6 +349,8 @@ sub set_flipped
     my ($self, $v) = @_;
 
     $self->_flipped($v);
+
+    $self->_recalc();
 
     return;
 }

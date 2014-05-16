@@ -14,7 +14,7 @@ Version 0.01
 
 =cut
 
-our $VERSION = '0.1203';
+our $VERSION = '0.1300';
 
 use parent 'Games::Solitaire::Verify::Base';
 
@@ -164,9 +164,9 @@ sub to_string
     my $self = shift;
 
     return join(" ", "Talon:",
-        (map { $_->to_string()} reverse @{$self->_waste()}),
+        (map { $_->fast_s() } reverse @{$self->_waste()}),
         '==>',
-        (map { $_->to_string()} @{$self->_undealt_cards()}),
+        (map { $_->fast_s() } @{$self->_undealt_cards()}),
         '<==',
     );
 }
