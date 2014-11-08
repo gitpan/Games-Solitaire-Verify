@@ -1,0 +1,23 @@
+do{ my $x = {
+       'recommends' => {},
+       'build_requires' => {
+                             'Test::Differences' => 0,
+                             'autodie' => 0,
+                             'Test::More' => 0
+                           },
+       'test_requires' => {},
+       'conflicts' => {},
+       'requires' => {
+                       'warnings' => 0,
+                       'perl' => '5.008',
+                       'Class::XSAccessor' => 0,
+                       'Getopt::Long' => '2.36',
+                       'Exception::Class' => 0,
+                       'File::Spec' => 0,
+                       'base' => 0,
+                       'strict' => 0,
+                       'parent' => 0,
+                       'List::Util' => 0
+                     }
+     };
+$x; }

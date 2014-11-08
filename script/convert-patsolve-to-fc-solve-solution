@@ -3,28 +3,27 @@
 use strict;
 use warnings;
 
-use Games::Solitaire::Verify::App::CmdLine;
+use Games::Solitaire::Verify::App::CmdLine::From_Patsolve;
 
-my $app = Games::Solitaire::Verify::App::CmdLine->new({argv => \@ARGV});
+my $app = Games::Solitaire::Verify::App::CmdLine::From_Patsolve->new({argv => \@ARGV});
 
 $app->run();
 
 =head1 NAME
 
-verify-solitaire-solution -- A command-line tool for verifying solitaire
-solutions.
+convert-patsolve-to-fc-solve-solution -- A command-line tool for converting
+patsolve solutions to Freecell Solver's.
 
 =head1 SYNOPSIS
 
-    $ fc-solve -p -t -sam 24.board | verify-solitaire-solution -
-    $ fc-solve -g seahaven_towers -p -t -sam 24.seahaven.board \
-        | verify-solitaire-solution -g seahaven_towers
-
+    $ patsolve -S -f 24.board
+    $ convert-patsolve-to-fc-solve-solution -g freecell 24.board ./win > 24.sol
+    $ verify-solitaire-solution -g freecell ./24.sol
 
 =head1 OVERVIEW
 
-F<verify-solitaire-solution> is a command-line interface to 
-L<Games::Solitaire::Verify>.
+F<convert-patsolve-to-fc-solve-solution> translates patsolve solutions
+to fc-solve compatible ones.
 
 =head1 COMMAND LINE OPTIONS
 

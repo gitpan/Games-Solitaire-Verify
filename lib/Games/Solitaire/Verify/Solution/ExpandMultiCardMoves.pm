@@ -3,19 +3,8 @@ package Games::Solitaire::Verify::Solution::ExpandMultiCardMoves;
 use warnings;
 use strict;
 
-=head1 NAME
 
-Games::Solitaire::Verify::Solution::ExpandMultiCardMoves - expand
-the moves in a solution from multi-card moves into individual single-card
-moves.
-
-=head1 VERSION
-
-Version 0.1001
-
-=cut
-
-our $VERSION = '0.1300';
+our $VERSION = '0.1400';
 
 use parent 'Games::Solitaire::Verify::Base';
 
@@ -42,50 +31,6 @@ __PACKAGE__->mk_acc_ref([qw(
     _output_fh
     )]);
 
-=head1 SYNOPSIS
-
-    use Games::Solitaire::Verify::Solution::ExpandMultiCardMoves;
-
-    my $input_filename = "freecell-24-solution.txt";
-
-    open (my $input_fh, "<", $input_filename)
-        or die "Cannot open file $!";
-
-    # Initialise a column
-    my $solution = Games::Solitaire::Verify::Solution::ExpandMultiCardMoves->new(
-        {
-            input_fh => $input_fh,
-            variant => "freecell",
-            output_fh => \*STDOUT,
-        },
-    );
-
-    my $ret = $solution->verify();
-
-    close($input_fh);
-
-    if ($ret)
-    {
-        die $ret;
-    }
-    else
-    {
-        print "Solution is OK";
-    }
-
-=head1 FUNCTIONS
-
-=head2 Games::Solitaire::Verify::Solution->new({variant => $variant, input_fh => $input_fh})
-
-Constructs a new solution verifier with the variant $variant (see
-L<Games::Solitaire::Verify::VariantsMap> ), and the input file handle
-$input_fh.
-
-If $variant is C<"custom">, then the constructor also requires a
-C<'variant_params'> key which should be a populated
-L<Games::Solitaire::Verify::VariantParams> object.
-
-=cut
 
 sub _init
 {
@@ -143,25 +88,9 @@ sub _calc_variant_args
     return \@ret;
 }
 
-sub _read_state
+sub _assign_read_new_state
 {
-    my $self = shift;
-
-    my $line = $self->_get_line();
-
-    if ($line ne "")
-    {
-        die "Non empty line before state";
-    }
-
-    $self->_out_line($line);
-
-    my $str = "";
-
-    while (($line = $self->_get_line()) && ($line ne ""))
-    {
-        $str .= $line . "\n";
-    }
+    my ($self, $str) = @_;
 
     my $new_state = Games::Solitaire::Verify::State->new(
             {
@@ -182,8 +111,34 @@ sub _read_state
             die "States don't match";
         }
     }
-    $self->_out($new_state->to_string());
     $self->_state($new_state);
+
+    return;
+}
+
+sub _read_state
+{
+    my $self = shift;
+
+    my $line = $self->_get_line();
+
+    if ($line ne "")
+    {
+        die "Non empty line before state";
+    }
+
+    $self->_out_line($line);
+
+    my $str = "";
+
+    while (($line = $self->_get_line()) && ($line ne ""))
+    {
+        $str .= $line . "\n";
+    }
+
+    $self->_assign_read_new_state($str);
+
+    $self->_out($str);
 
     $self->_out_line("");
     while (defined($line = $self->_get_line()) && ($line eq ""))
@@ -242,26 +197,6 @@ sub _read_move
 }
 
 
-=begin notes
-
-=head1 Planning.
-
-Let's supppose we are moving 7 cards from col 1 to col 6, with one
-empty freecell and two empty columns.
-
-* 8 7 6 5 4 3 2 1
-
-* 8
-
-We first move [2 1] to an empty column, then move [4 3] there, then move
-[2 1] on top of the [4 3] to form a [4 3 2 1]. Then we move [6 5]
-to the other empty column, and then we move 7 across and do the reverse
-moves.
-
-
-=end notes
-
-=cut
 
 sub _find_max_step
 {
@@ -334,6 +269,16 @@ sub _apply_move
             return;
         };
 
+        my $past_first_output_state_promise = sub {
+            $self->_out(
+                "\n"
+                . $self->_state->to_string
+                . "\n\n====================\n\n"
+            );
+
+            return;
+        };
+
         my $add_move = sub {
             my ($move_line) = @_;
 
@@ -358,16 +303,7 @@ sub _apply_move
                 );
             }
 
-            $output_state_promise = sub {
-                $self->_out_line("");
-                $self->_out($self->_state->to_string);
-                $self->_out_line("");
-                $self->_out_line("");
-                $self->_out_line("====================");
-                $self->_out_line("");
-
-                return;
-            };
+            $output_state_promise = $past_first_output_state_promise;
 
             return;
         };
@@ -487,11 +423,6 @@ sub _get_line
     return $ret;
 }
 
-=head2 $solution->verify()
-
-Traverse the solution verifying it.
-
-=cut
 
 sub verify
 {
@@ -535,56 +466,224 @@ sub verify
     return;
 }
 
+1; # End of Games::Solitaire::Verify::Solution::ExpandMultiCardMoves
+
+__END__
+
+=pod
+
+=encoding UTF-8
+
+=head1 NAME
+
+Games::Solitaire::Verify::Solution::ExpandMultiCardMoves - expand
+the moves in a solution from multi-card moves into individual single-card
+moves.
+
+=head1 VERSION
+
+version 0.1400
+
+=head1 SYNOPSIS
+
+    use Games::Solitaire::Verify::Solution::ExpandMultiCardMoves;
+
+    my $input_filename = "freecell-24-solution.txt";
+
+    open (my $input_fh, "<", $input_filename)
+        or die "Cannot open file $!";
+
+    # Initialise a column
+    my $solution = Games::Solitaire::Verify::Solution::ExpandMultiCardMoves->new(
+        {
+            input_fh => $input_fh,
+            variant => "freecell",
+            output_fh => \*STDOUT,
+        },
+    );
+
+    my $ret = $solution->verify();
+
+    close($input_fh);
+
+    if ($ret)
+    {
+        die $ret;
+    }
+    else
+    {
+        print "Solution is OK";
+    }
+
+=head1 METHODS
+
+=head2 Games::Solitaire::Verify::Solution->new({variant => $variant, input_fh => $input_fh})
+
+Constructs a new solution verifier with the variant $variant (see
+L<Games::Solitaire::Verify::VariantsMap> ), and the input file handle
+$input_fh.
+
+If $variant is C<"custom">, then the constructor also requires a
+C<'variant_params'> key which should be a populated
+L<Games::Solitaire::Verify::VariantParams> object.
+
+=begin notes
+
+=head1 Planning.
+
+Let's supppose we are moving 7 cards from col 1 to col 6, with one
+empty freecell and two empty columns.
+
+* 8 7 6 5 4 3 2 1
+
+* 8
+
+We first move [2 1] to an empty column, then move [4 3] there, then move
+[2 1] on top of the [4 3] to form a [4 3 2 1]. Then we move [6 5]
+to the other empty column, and then we move 7 across and do the reverse
+moves.
+
+=end notes
+
+=head2 $solution->verify()
+
+Traverse the solution verifying it.
 
 =head1 AUTHOR
 
-Shlomi Fish, L<http://www.shlomifish.org/>.
+Shlomi Fish <shlomif@cpan.org>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is Copyright (c) 2014 by Shlomi Fish.
+
+This is free software, licensed under:
+
+  The MIT (X11) License
 
 =head1 BUGS
 
-Please report any bugs or feature requests to C<bug-games-solitaire-verifysolution-move at rt.cpan.org>, or through
-the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Games-Solitaire-Verify>.  I will be notified, and then you'll
-automatically be notified of progress on your bug as I make changes.
+Please report any bugs or feature requests on the bugtracker website
+http://rt.cpan.org/NoAuth/Bugs.html?Dist=Games-Solitaire-Verify or by email
+to bug-games-solitaire-verify@rt.cpan.org.
+
+When submitting a bug or request, please include a test-file or a
+patch to an existing test-file that illustrates the bug or desired
+feature.
+
+=for :stopwords cpan testmatrix url annocpan anno bugtracker rt cpants kwalitee diff irc mailto metadata placeholders metacpan
 
 =head1 SUPPORT
 
+=head2 Perldoc
+
 You can find documentation for this module with the perldoc command.
 
-    perldoc Games::Solitaire::Verify::Solution
+  perldoc Games::Solitaire::Verify
 
-You can also look for information at:
+=head2 Websites
+
+The following websites have more information about this module, and may be of help to you. As always,
+in addition to those websites please use your favorite search engine to discover more resources.
 
 =over 4
 
-=item * RT: CPAN's request tracker
+=item *
 
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Games-Solitaire-Verify>
+MetaCPAN
 
-=item * AnnoCPAN: Annotated CPAN documentation
+A modern, open-source CPAN search engine, useful to view POD in HTML format.
 
-L<http://annocpan.org/dist/Games-Solitaire-Verify>
+L<http://metacpan.org/release/Games-Solitaire-Verify>
 
-=item * CPAN Ratings
+=item *
 
-L<http://cpanratings.perl.org/d/Games-Solitaire-Verify>
+Search CPAN
 
-=item * Search CPAN
+The default CPAN search engine, useful to view POD in HTML format.
 
 L<http://search.cpan.org/dist/Games-Solitaire-Verify>
 
+=item *
+
+RT: CPAN's Bug Tracker
+
+The RT ( Request Tracker ) website is the default bug/issue tracking system for CPAN.
+
+L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Games-Solitaire-Verify>
+
+=item *
+
+AnnoCPAN
+
+The AnnoCPAN is a website that allows community annotations of Perl module documentation.
+
+L<http://annocpan.org/dist/Games-Solitaire-Verify>
+
+=item *
+
+CPAN Ratings
+
+The CPAN Ratings is a website that allows community ratings and reviews of Perl modules.
+
+L<http://cpanratings.perl.org/d/Games-Solitaire-Verify>
+
+=item *
+
+CPAN Forum
+
+The CPAN Forum is a web forum for discussing Perl modules.
+
+L<http://cpanforum.com/dist/Games-Solitaire-Verify>
+
+=item *
+
+CPANTS
+
+The CPANTS is a website that analyzes the Kwalitee ( code metrics ) of a distribution.
+
+L<http://cpants.perl.org/dist/overview/Games-Solitaire-Verify>
+
+=item *
+
+CPAN Testers
+
+The CPAN Testers is a network of smokers who run automated tests on uploaded CPAN distributions.
+
+L<http://www.cpantesters.org/distro/G/Games-Solitaire-Verify>
+
+=item *
+
+CPAN Testers Matrix
+
+The CPAN Testers Matrix is a website that provides a visual overview of the test results for a distribution on various Perls/platforms.
+
+L<http://matrix.cpantesters.org/?dist=Games-Solitaire-Verify>
+
+=item *
+
+CPAN Testers Dependencies
+
+The CPAN Testers Dependencies is a website that shows a chart of the test results of all dependencies for a distribution.
+
+L<http://deps.cpantesters.org/?module=Games::Solitaire::Verify>
+
 =back
 
+=head2 Bugs / Feature Requests
 
-=head1 ACKNOWLEDGEMENTS
+Please report any bugs or feature requests by email to C<bug-games-solitaire-verify at rt.cpan.org>, or through
+the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Games-Solitaire-Verify>. You will be automatically notified of any
+progress on the request by the system.
 
+=head2 Source Code
 
-=head1 COPYRIGHT & LICENSE
+The code is open to the world, and available for you to hack on. Please feel free to browse it and play
+with it, or whatever. If you want to contribute patches, please send me a diff or prod me to pull
+from your repository :)
 
-Copyright 2008 Shlomi Fish.
+L<http://bitbucket.org/shlomif/fc-solve>
 
-This program is released under the following license: MIT/X11
-( L<http://www.opensource.org/licenses/mit-license.php> ).
+  git clone http://bitbucket.org/shlomif/fc-solve
 
 =cut
-
-1; # End of Games::Solitaire::Verify::Solution::ExpandMultiCardMoves

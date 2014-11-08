@@ -3,20 +3,8 @@ package Games::Solitaire::Verify::Card;
 use warnings;
 use strict;
 
-=encoding utf8
 
-=head1 NAME
-
-Games::Solitaire::Verify::Card - a class wrapper for an individual
-Solitaire card.
-
-=head1 VERSION
-
-Version 0.0101
-
-=cut
-
-our $VERSION = '0.1300';
+our $VERSION = '0.1400';
 
 use parent 'Games::Solitaire::Verify::Base';
 
@@ -32,22 +20,6 @@ __PACKAGE__->mk_acc_ref([qw(
     _game
     )]);
 
-=head1 SYNOPSIS
-
-    use Games::Solitaire::Verify::Card;
-
-    # Initialise a Queen-of-Hearts
-    my $queen_of_hearts = Games::Solitaire::Verify::Card->new(
-        {
-            string => "QH",
-            id => 4,
-            data => { %DATA },
-        },
-    );
-
-=head1 FUNCTIONS
-
-=cut
 
 sub _recalc
 {
@@ -92,11 +64,6 @@ my @suits_map_proto =
 
 my %suits_map = (map {@$_} @suits_map_proto);
 
-=head2 $class->get_suits_seq()
-
-Returns the expected sequence of the suits - "H", "S", "C", "D".
-
-=cut
 
 sub get_suits_seq
 {
@@ -105,17 +72,6 @@ sub get_suits_seq
     return [map { $_->[0] } @suits_map_proto];
 }
 
-=head2 $class->calc_rank($rank_string)
-
-Calculates the numerical rank of the string passed as argument.
-
-Example:
-
-    my $ten = Games::Solitaire::Verify::Card->calc_rank("T")
-    # Prints 10.
-    print "$ten\n";
-
-=cut
 
 sub calc_rank
 {
@@ -124,11 +80,6 @@ sub calc_rank
     return $ranks_map{$s};
 }
 
-=head2 $class->calc_rank_with_0($rank_string)
-
-Same as calc_rank only supporting "0" as the zero'th card.
-
-=cut
 
 sub calc_rank_with_0
 {
@@ -211,6 +162,143 @@ sub _init
     return;
 }
 
+
+sub color
+{
+    my ($self) = @_;
+
+    return $self->color_for_suit($self->suit());
+}
+
+
+sub color_for_suit
+{
+    my ($self, $suit) = @_;
+
+    return $suits_map{$suit}->{'color'};
+}
+
+
+sub clone
+{
+    my $self = shift;
+
+    my $new_card = Games::Solitaire::Verify::Card->new();
+
+    $new_card->data($self->data());
+    $new_card->id($self->id());
+    $new_card->suit($self->suit());
+    $new_card->rank($self->rank());
+
+    $new_card->_recalc();
+
+    return $new_card;
+}
+
+
+sub _to_string_without_flipped
+{
+    my $self = shift;
+
+    return $self->rank_to_string($self->rank()) . $self->suit();
+}
+
+sub to_string
+{
+    my $self = shift;
+
+    my $s = $self->_to_string_without_flipped();
+
+    return ($self->is_flipped ? "<$s>" : $s);
+}
+
+
+sub fast_s
+{
+    return shift->_s;
+}
+
+
+{
+    my @_t_nums = ('0', (map { $_->{t} } @card_nums));
+
+sub rank_to_string
+{
+    my ($class, $rank) = @_;
+
+    return $_t_nums[$rank];
+}
+
+}
+
+
+sub is_flipped
+{
+    return shift->_flipped();
+}
+
+
+sub set_flipped
+{
+    my ($self, $v) = @_;
+
+    $self->_flipped($v);
+
+    $self->_recalc();
+
+    return;
+}
+
+1; # End of Games::Solitaire::Verify::Card
+
+__END__
+
+=pod
+
+=encoding UTF-8
+
+=head1 NAME
+
+Games::Solitaire::Verify::Card - a class wrapper for an individual
+Solitaire card.
+
+=head1 VERSION
+
+version 0.1400
+
+=head1 SYNOPSIS
+
+    use Games::Solitaire::Verify::Card;
+
+    # Initialise a Queen-of-Hearts
+    my $queen_of_hearts = Games::Solitaire::Verify::Card->new(
+        {
+            string => "QH",
+            id => 4,
+            data => { %DATA },
+        },
+    );
+
+=head1 METHODS
+
+=head2 $class->get_suits_seq()
+
+Returns the expected sequence of the suits - "H", "S", "C", "D".
+
+=head2 $class->calc_rank($rank_string)
+
+Calculates the numerical rank of the string passed as argument.
+
+Example:
+
+    my $ten = Games::Solitaire::Verify::Card->calc_rank("T")
+    # Prints 10.
+    print "$ten\n";
+
+=head2 $class->calc_rank_with_0($rank_string)
+
+Same as calc_rank only supporting "0" as the zero'th card.
+
 =head2 $card->data()
 
 Arbitrary data that is associated with the card. Can hold any scalar.
@@ -232,179 +320,169 @@ Returns "H", "C", "D" or "S" depending on the suit.
 
 Returns "red" or "black" depending on the rank of the card.
 
-=cut
-
-sub color
-{
-    my ($self) = @_;
-
-    return $self->color_for_suit($self->suit());
-}
-
 =head2 $card->color_for_suit($suit)
 
 Get the color of the suit $suit (which may be different than the card's suit).
-
-=cut
-
-sub color_for_suit
-{
-    my ($self, $suit) = @_;
-
-    return $suits_map{$suit}->{'color'};
-}
 
 =head2 my $copy = $card->clone();
 
 Clones the card into a new copy.
 
-=cut
-
-sub clone
-{
-    my $self = shift;
-
-    my $new_card = Games::Solitaire::Verify::Card->new();
-
-    $new_card->data($self->data());
-    $new_card->id($self->id());
-    $new_card->suit($self->suit());
-    $new_card->rank($self->rank());
-
-    $new_card->_recalc();
-
-    return $new_card;
-}
-
 =head2 $card->to_string()
 
 Converts the card to a string representation.
 
-=cut
-
-sub _to_string_without_flipped
-{
-    my $self = shift;
-
-    return $self->rank_to_string($self->rank()) . $self->suit();
-}
-
-sub to_string
-{
-    my $self = shift;
-
-    my $s = $self->_to_string_without_flipped();
-
-    return ($self->is_flipped ? "<$s>" : $s);
-}
-
-=head2 $class->fast_s()
+=head2 $card->fast_s()
 
 A cached string representation. (Use with care).
-
-=cut
-
-sub fast_s
-{
-    return shift->_s;
-}
 
 =head2 $class->rank_to_string($rank_idx)
 
 Converts the rank to a string.
 
-=cut
-
-{
-    my @_t_nums = ('0', (map { $_->{t} } @card_nums));
-
-sub rank_to_string
-{
-    my ($class, $rank) = @_;
-
-    return $_t_nums[$rank];
-}
-
-}
-
 =head2 $card->is_flipped()
 
 Determines if the card is flipped.
-
-=cut
-
-sub is_flipped
-{
-    return shift->_flipped();
-}
 
 =head2 $card->set_flipped($flipped_bool)
 
 Sets the card’s flipped status.
 
-=cut
-
-sub set_flipped
-{
-    my ($self, $v) = @_;
-
-    $self->_flipped($v);
-
-    $self->_recalc();
-
-    return;
-}
-
 =head1 AUTHOR
 
-Shlomi Fish, L<http://www.shlomifish.org/>.
+Shlomi Fish <shlomif@cpan.org>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is Copyright (c) 2014 by Shlomi Fish.
+
+This is free software, licensed under:
+
+  The MIT (X11) License
 
 =head1 BUGS
 
-Please report any bugs or feature requests to C<bug-games-solitaire-verifysolution-move at rt.cpan.org>, or through
-the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Games-Solitaire-Verify>.  I will be notified, and then you'll
-automatically be notified of progress on your bug as I make changes.
+Please report any bugs or feature requests on the bugtracker website
+http://rt.cpan.org/NoAuth/Bugs.html?Dist=Games-Solitaire-Verify or by email
+to bug-games-solitaire-verify@rt.cpan.org.
+
+When submitting a bug or request, please include a test-file or a
+patch to an existing test-file that illustrates the bug or desired
+feature.
+
+=for :stopwords cpan testmatrix url annocpan anno bugtracker rt cpants kwalitee diff irc mailto metadata placeholders metacpan
 
 =head1 SUPPORT
 
+=head2 Perldoc
+
 You can find documentation for this module with the perldoc command.
 
-    perldoc Games::Solitaire::Verify::Card
+  perldoc Games::Solitaire::Verify
 
+=head2 Websites
 
-You can also look for information at:
+The following websites have more information about this module, and may be of help to you. As always,
+in addition to those websites please use your favorite search engine to discover more resources.
 
 =over 4
 
-=item * RT: CPAN's request tracker
+=item *
 
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Games-Solitaire-Verify>
+MetaCPAN
 
-=item * AnnoCPAN: Annotated CPAN documentation
+A modern, open-source CPAN search engine, useful to view POD in HTML format.
 
-L<http://annocpan.org/dist/Games-Solitaire-Verify>
+L<http://metacpan.org/release/Games-Solitaire-Verify>
 
-=item * CPAN Ratings
+=item *
 
-L<http://cpanratings.perl.org/d/Games-Solitaire-Verify>
+Search CPAN
 
-=item * Search CPAN
+The default CPAN search engine, useful to view POD in HTML format.
 
 L<http://search.cpan.org/dist/Games-Solitaire-Verify>
 
+=item *
+
+RT: CPAN's Bug Tracker
+
+The RT ( Request Tracker ) website is the default bug/issue tracking system for CPAN.
+
+L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Games-Solitaire-Verify>
+
+=item *
+
+AnnoCPAN
+
+The AnnoCPAN is a website that allows community annotations of Perl module documentation.
+
+L<http://annocpan.org/dist/Games-Solitaire-Verify>
+
+=item *
+
+CPAN Ratings
+
+The CPAN Ratings is a website that allows community ratings and reviews of Perl modules.
+
+L<http://cpanratings.perl.org/d/Games-Solitaire-Verify>
+
+=item *
+
+CPAN Forum
+
+The CPAN Forum is a web forum for discussing Perl modules.
+
+L<http://cpanforum.com/dist/Games-Solitaire-Verify>
+
+=item *
+
+CPANTS
+
+The CPANTS is a website that analyzes the Kwalitee ( code metrics ) of a distribution.
+
+L<http://cpants.perl.org/dist/overview/Games-Solitaire-Verify>
+
+=item *
+
+CPAN Testers
+
+The CPAN Testers is a network of smokers who run automated tests on uploaded CPAN distributions.
+
+L<http://www.cpantesters.org/distro/G/Games-Solitaire-Verify>
+
+=item *
+
+CPAN Testers Matrix
+
+The CPAN Testers Matrix is a website that provides a visual overview of the test results for a distribution on various Perls/platforms.
+
+L<http://matrix.cpantesters.org/?dist=Games-Solitaire-Verify>
+
+=item *
+
+CPAN Testers Dependencies
+
+The CPAN Testers Dependencies is a website that shows a chart of the test results of all dependencies for a distribution.
+
+L<http://deps.cpantesters.org/?module=Games::Solitaire::Verify>
+
 =back
 
+=head2 Bugs / Feature Requests
 
-=head1 ACKNOWLEDGEMENTS
+Please report any bugs or feature requests by email to C<bug-games-solitaire-verify at rt.cpan.org>, or through
+the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Games-Solitaire-Verify>. You will be automatically notified of any
+progress on the request by the system.
 
+=head2 Source Code
 
-=head1 COPYRIGHT & LICENSE
+The code is open to the world, and available for you to hack on. Please feel free to browse it and play
+with it, or whatever. If you want to contribute patches, please send me a diff or prod me to pull
+from your repository :)
 
-Copyright 2008 Shlomi Fish.
+L<http://bitbucket.org/shlomif/fc-solve>
 
-This program is released under the following license: MIT/X11
-( L<http://www.opensource.org/licenses/mit-license.php> ).
+  git clone http://bitbucket.org/shlomif/fc-solve
 
 =cut
-
-1; # End of Games::Solitaire::Verify::Move

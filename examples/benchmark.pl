@@ -5,7 +5,7 @@ use warnings;
 
 use autodie;
 
-use List::MoreUtils qw(first_index);
+use List::MoreUtils qw(first_index true);
 
 use Games::Solitaire::Verify::Solution;
 use Games::Solitaire::Verify::App::CmdLine;
@@ -40,30 +40,25 @@ my $LAST_INDEX = ($ENV{L} || 100);
 
 foreach my $board_idx (1 .. $LAST_INDEX)
 {
-    my $board_str = `pi-make-microsoft-freecell-board -t $board_idx`;
-    my $board_fn = 'board.txt';
-    open my $out_fh, '>', $board_fn;
-    print {$out_fh} $board_str;
-    close($out_fh);
-    my $fc_solve_output = `fc-solve -p -t -sam -sel @fc_solve_args $board_fn`;
+    print "== $board_idx ==\n";
+    my $fc_solve_output = `pi-make-microsoft-freecell-board -t $board_idx | fc-solve -p -t -sam -sel @fc_solve_args`;
 
-    sub _line_found
-    {
+    my $_line_found = sub {
         my ($s) = @_;
 
         return (($fc_solve_output =~ m{^\Q$s\E}ms) ? 1 : 0);
-    }
+    };
 
-    my $is_solvable = _line_found('This game is solveable');
-    my $unsolved = _line_found('I could not solve');
-    my $intractable = _line_found('Iterations count exceeded');
+    my $is_solvable = $_line_found->('This game is solveable');
+    my $unsolved = $_line_found->('I could not solve');
+    my $intractable = $_line_found->('Iterations count exceeded');
 
-    my @true = (grep { $_ } ($is_solvable, $unsolved, $intractable));
-
-    if (! (@true == 1))
+    if (1 != true { $_ } ($is_solvable, $unsolved, $intractable))
     {
         die "Game is more than one of solved, unsolvable or intractable!";
     }
+
+    my $sol_len = 0;
 
     if ($is_solvable)
     {
@@ -92,11 +87,11 @@ foreach my $board_idx (1 .. $LAST_INDEX)
             # die "Verdict == " . Dumper($verdict);
             die "Invalid solution!";
         }
+
+        $sol_len = () = ($fc_solve_output =~ m{^Move}msg);
     }
 
     my ($num_iters) = ($fc_solve_output =~ m{^Total number of states checked is (\d+)\.$}ms);
-    my $sol_len = () = ($fc_solve_output =~ m{^Move}msg);
-
     print "Verdict: " .
     ($is_solvable ? "Solved"
         : $intractable ? "Intractable"

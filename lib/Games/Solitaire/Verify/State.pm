@@ -3,18 +3,8 @@ package Games::Solitaire::Verify::State;
 use warnings;
 use strict;
 
-=head1 NAME
 
-Games::Solitaire::Verify::State - a class for Solitaire
-states (or positions) of the entire board.
-
-=head1 VERSION
-
-Version 0.0101
-
-=cut
-
-our $VERSION = '0.1300';
+our $VERSION = '0.1400';
 
 use parent 'Games::Solitaire::Verify::Base';
 
@@ -39,45 +29,6 @@ __PACKAGE__->mk_acc_ref([qw(
     _temp_move
     )]);
 
-=head1 SYNOPSIS
-
-    use Games::Solitaire::Verify::State;
-
-    my $board = <<"EOF";
-    Foundations: H-6 C-A D-A S-4
-    Freecells:  3D  8H  JH  9H
-    : 4C 2C 9C 8C QS JD
-    : KS QH
-    : QC 9S
-    : 5C
-    : 2D KD TH TC TD 8D 7C 6D 5S 4D 3C
-    : 7H JS KH TS KC QD JC
-    : 9D 8S
-    : 7S 6C 7D 6S 5D
-    EOF
-
-    # Initialise a board
-    my $board = Games::Solitaire::Verify::State->new(
-        {
-            string => $board,
-            variant => "freecell",
-        },
-    );
-
-    # Prints 8.
-    print $board->num_columns(), "\n";
-
-    # Prints ": QC 9S"
-    print $board->get_column(2)->to_string(), "\n"
-
-=head1 FUNCTIONS
-
-=head2 $self->set_freecells($freecells)
-
-Sets the freecells' object, which should be a
-L<Games::Solitaire::Verify::Freecells> object.
-
-=cut
 
 sub set_freecells
 {
@@ -105,12 +56,6 @@ sub _assign_freecells_from_string
     return;
 }
 
-=head2 $self->add_column($columns)
-
-Adds a new column of cards that should be an
-L<Games::Solitaire::Verify::Column> object.
-
-=cut
 
 sub add_column
 {
@@ -121,12 +66,6 @@ sub add_column
     return;
 }
 
-=head2 $self->set_foundations($foundations);
-
-Sets the foundations to a value. Should be isa
-L<Games::Solitaire::Verify::Foundations> .
-
-=cut
 
 sub set_foundations
 {
@@ -255,11 +194,6 @@ sub _init
     }
 }
 
-=head2 $state->get_freecell($index)
-
-Returns the contents of the freecell No. $index or undef() if it's empty.
-
-=cut
 
 sub get_freecell
 {
@@ -268,11 +202,6 @@ sub get_freecell
     return $self->_freecells()->cell($index);
 }
 
-=head2 $state->set_freecell($index, $card)
-
-Assigns $card to the contents of the freecell No. $index .
-
-=cut
 
 sub set_freecell
 {
@@ -281,12 +210,6 @@ sub set_freecell
     return $self->_freecells->assign($index, $card);
 }
 
-=head2 $state->get_foundation_value($suit, $index)
-
-Returns the foundation value for the suit $suit of the foundations
-No. $index .
-
-=cut
 
 sub get_foundation_value
 {
@@ -295,12 +218,6 @@ sub get_foundation_value
     return $self->_foundations()->value($suit, $idx);
 }
 
-=head2 $state->increment_foundation_value($suit, $index)
-
-Increments the foundation value for the suit $suit of the foundations
-No. $index .
-
-=cut
 
 sub increment_foundation_value
 {
@@ -311,12 +228,6 @@ sub increment_foundation_value
     return;
 }
 
-=head2 $board->num_decks()
-
-Returns the number of decks that the variant has. Useful when querying
-the foundations.
-
-=cut
 
 sub num_decks
 {
@@ -325,11 +236,6 @@ sub num_decks
     return $self->_variant_params->num_decks();
 }
 
-=head2 $board->num_freecells()
-
-Returns the number of Freecells in the board.
-
-=cut
 
 sub num_freecells
 {
@@ -338,11 +244,6 @@ sub num_freecells
     return $self->_variant_params->num_freecells();
 }
 
-=head2 $board->num_empty_freecells()
-
-Returns the number of empty Freecells on the board.
-
-=cut
 
 sub num_empty_freecells
 {
@@ -351,11 +252,6 @@ sub num_empty_freecells
     return $self->_freecells->num_empty();
 }
 
-=head2 $board->num_columns()
-
-The number of columns in the board.
-
-=cut
 
 sub num_columns
 {
@@ -364,11 +260,6 @@ sub num_columns
     return $self->_variant_params->num_columns();
 }
 
-=head2 $board->get_column($index)
-
-Gets the column object for column No. $index.
-
-=cut
 
 sub get_column
 {
@@ -378,11 +269,6 @@ sub get_column
     return $self->_columns->[$index];
 }
 
-=head2 $board->num_empty_columns()
-
-Returns the number of completely unoccupied columns in the board.
-
-=cut
 
 sub num_empty_columns
 {
@@ -400,10 +286,6 @@ sub num_empty_columns
     return $count;
 }
 
-=head2 $board->clone()
-
-Returns a clone of the board, with all of its element duplicated.
-=cut
 
 sub clone
 {
@@ -438,12 +320,6 @@ sub clone
     return $copy;
 }
 
-=head2 my $verdict = $board->verify_and_perform_move($move);
-
-Performs $move on the board. If successful, returns 0. Else returns a non-zero
-value. See L<Games::Solitaire::Verify::Move> for more information.
-
-=cut
 
 # Returns 0 on success, else the error.
 sub _can_put_into_empty_column
@@ -594,11 +470,6 @@ sub _is_sequence_in_column
     return 0;
 }
 
-=head2 $self->clear_freecell($index)
-
-Clears/empties the freecell at position $pos .
-
-=cut
 
 sub clear_freecell
 {
@@ -921,11 +792,6 @@ sub _stringify_foundations
     return $self->_foundations()->to_string();
 }
 
-=head2 $self->to_string()
-
-Stringifies the board into the Freecell Solver solution display notation.
-
-=cut
 
 sub to_string
 {
@@ -944,56 +810,266 @@ sub to_string
     );
 }
 
+1; # End of Games::Solitaire::Verify::State
+
+__END__
+
+=pod
+
+=encoding UTF-8
+
+=head1 NAME
+
+Games::Solitaire::Verify::State - a class for Solitaire
+states (or positions) of the entire board.
+
+=head1 VERSION
+
+version 0.1400
+
+=head1 SYNOPSIS
+
+    use Games::Solitaire::Verify::State;
+
+    my $board = <<"EOF";
+    Foundations: H-6 C-A D-A S-4
+    Freecells:  3D  8H  JH  9H
+    : 4C 2C 9C 8C QS JD
+    : KS QH
+    : QC 9S
+    : 5C
+    : 2D KD TH TC TD 8D 7C 6D 5S 4D 3C
+    : 7H JS KH TS KC QD JC
+    : 9D 8S
+    : 7S 6C 7D 6S 5D
+    EOF
+
+    # Initialise a board
+    my $board = Games::Solitaire::Verify::State->new(
+        {
+            string => $board,
+            variant => "freecell",
+        },
+    );
+
+    # Prints 8.
+    print $board->num_columns(), "\n";
+
+    # Prints ": QC 9S"
+    print $board->get_column(2)->to_string(), "\n"
+
+=head1 FUNCTIONS
+
+=head2 $self->set_freecells($freecells)
+
+Sets the freecells' object, which should be a
+L<Games::Solitaire::Verify::Freecells> object.
+
+=head2 $self->add_column($columns)
+
+Adds a new column of cards that should be an
+L<Games::Solitaire::Verify::Column> object.
+
+=head2 $self->set_foundations($foundations);
+
+Sets the foundations to a value. Should be isa
+L<Games::Solitaire::Verify::Foundations> .
+
+=head2 $state->get_freecell($index)
+
+Returns the contents of the freecell No. $index or undef() if it's empty.
+
+=head2 $state->set_freecell($index, $card)
+
+Assigns $card to the contents of the freecell No. $index .
+
+=head2 $state->get_foundation_value($suit, $index)
+
+Returns the foundation value for the suit $suit of the foundations
+No. $index .
+
+=head2 $state->increment_foundation_value($suit, $index)
+
+Increments the foundation value for the suit $suit of the foundations
+No. $index .
+
+=head2 $board->num_decks()
+
+Returns the number of decks that the variant has. Useful when querying
+the foundations.
+
+=head2 $board->num_freecells()
+
+Returns the number of Freecells in the board.
+
+=head2 $board->num_empty_freecells()
+
+Returns the number of empty Freecells on the board.
+
+=head2 $board->num_columns()
+
+The number of columns in the board.
+
+=head2 $board->get_column($index)
+
+Gets the column object for column No. $index.
+
+=head2 $board->num_empty_columns()
+
+Returns the number of completely unoccupied columns in the board.
+
+=head2 $board->clone()
+
+Returns a clone of the board, with all of its element duplicated.
+
+=head2 my $verdict = $board->verify_and_perform_move($move);
+
+Performs $move on the board. If successful, returns 0. Else returns a non-zero
+value. See L<Games::Solitaire::Verify::Move> for more information.
+
+=head2 $self->clear_freecell($index)
+
+Clears/empties the freecell at position $pos .
+
+=head2 $self->to_string()
+
+Stringifies the board into the Freecell Solver solution display notation.
+
 =head1 AUTHOR
 
-Shlomi Fish, L<http://www.shlomifish.org/>.
+Shlomi Fish <shlomif@cpan.org>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is Copyright (c) 2014 by Shlomi Fish.
+
+This is free software, licensed under:
+
+  The MIT (X11) License
 
 =head1 BUGS
 
-Please report any bugs or feature requests to C<bug-games-solitaire-verifysolution-move at rt.cpan.org>, or through
-the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Games-Solitaire-Verify>.  I will be notified, and then you'll
-automatically be notified of progress on your bug as I make changes.
+Please report any bugs or feature requests on the bugtracker website
+http://rt.cpan.org/NoAuth/Bugs.html?Dist=Games-Solitaire-Verify or by email
+to bug-games-solitaire-verify@rt.cpan.org.
+
+When submitting a bug or request, please include a test-file or a
+patch to an existing test-file that illustrates the bug or desired
+feature.
+
+=for :stopwords cpan testmatrix url annocpan anno bugtracker rt cpants kwalitee diff irc mailto metadata placeholders metacpan
 
 =head1 SUPPORT
 
+=head2 Perldoc
+
 You can find documentation for this module with the perldoc command.
 
-    perldoc Games::Solitaire::Verify::Column
+  perldoc Games::Solitaire::Verify
 
+=head2 Websites
 
-You can also look for information at:
+The following websites have more information about this module, and may be of help to you. As always,
+in addition to those websites please use your favorite search engine to discover more resources.
 
 =over 4
 
-=item * RT: CPAN's request tracker
+=item *
 
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Games-Solitaire-Verify>
+MetaCPAN
 
-=item * AnnoCPAN: Annotated CPAN documentation
+A modern, open-source CPAN search engine, useful to view POD in HTML format.
 
-L<http://annocpan.org/dist/Games-Solitaire-Verify>
+L<http://metacpan.org/release/Games-Solitaire-Verify>
 
-=item * CPAN Ratings
+=item *
 
-L<http://cpanratings.perl.org/d/Games-Solitaire-Verify>
+Search CPAN
 
-=item * Search CPAN
+The default CPAN search engine, useful to view POD in HTML format.
 
 L<http://search.cpan.org/dist/Games-Solitaire-Verify>
 
+=item *
+
+RT: CPAN's Bug Tracker
+
+The RT ( Request Tracker ) website is the default bug/issue tracking system for CPAN.
+
+L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Games-Solitaire-Verify>
+
+=item *
+
+AnnoCPAN
+
+The AnnoCPAN is a website that allows community annotations of Perl module documentation.
+
+L<http://annocpan.org/dist/Games-Solitaire-Verify>
+
+=item *
+
+CPAN Ratings
+
+The CPAN Ratings is a website that allows community ratings and reviews of Perl modules.
+
+L<http://cpanratings.perl.org/d/Games-Solitaire-Verify>
+
+=item *
+
+CPAN Forum
+
+The CPAN Forum is a web forum for discussing Perl modules.
+
+L<http://cpanforum.com/dist/Games-Solitaire-Verify>
+
+=item *
+
+CPANTS
+
+The CPANTS is a website that analyzes the Kwalitee ( code metrics ) of a distribution.
+
+L<http://cpants.perl.org/dist/overview/Games-Solitaire-Verify>
+
+=item *
+
+CPAN Testers
+
+The CPAN Testers is a network of smokers who run automated tests on uploaded CPAN distributions.
+
+L<http://www.cpantesters.org/distro/G/Games-Solitaire-Verify>
+
+=item *
+
+CPAN Testers Matrix
+
+The CPAN Testers Matrix is a website that provides a visual overview of the test results for a distribution on various Perls/platforms.
+
+L<http://matrix.cpantesters.org/?dist=Games-Solitaire-Verify>
+
+=item *
+
+CPAN Testers Dependencies
+
+The CPAN Testers Dependencies is a website that shows a chart of the test results of all dependencies for a distribution.
+
+L<http://deps.cpantesters.org/?module=Games::Solitaire::Verify>
+
 =back
 
+=head2 Bugs / Feature Requests
 
-=head1 ACKNOWLEDGEMENTS
+Please report any bugs or feature requests by email to C<bug-games-solitaire-verify at rt.cpan.org>, or through
+the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Games-Solitaire-Verify>. You will be automatically notified of any
+progress on the request by the system.
 
+=head2 Source Code
 
-=head1 COPYRIGHT & LICENSE
+The code is open to the world, and available for you to hack on. Please feel free to browse it and play
+with it, or whatever. If you want to contribute patches, please send me a diff or prod me to pull
+from your repository :)
 
-Copyright 2008 Shlomi Fish.
+L<http://bitbucket.org/shlomif/fc-solve>
 
-This program is released under the following license: MIT/X11
-( L<http://www.opensource.org/licenses/mit-license.php> ).
+  git clone http://bitbucket.org/shlomif/fc-solve
 
 =cut
-
-1; # End of Games::Solitaire::Verify::Move

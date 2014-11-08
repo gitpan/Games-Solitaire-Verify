@@ -1,0 +1,6 @@
+do{ my $x = {
+       'blib' => 1,
+       'Games-Solitaire-Verify-0.1300' => 1,
+       'Games-Solitaire-Verify-*' => 1
+     };
+$x; }
